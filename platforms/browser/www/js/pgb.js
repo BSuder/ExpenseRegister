@@ -38,7 +38,7 @@ function HTMLtext(){
 }
 
   $login.on('click', firebase.auth().signInWithRedirect(provider););
-/*
+
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -61,14 +61,14 @@ $(document).on('deviceready', function() {
 
   $loginButton.on('click', function() {
     googleapi.authorize({
-      client_id: '323290425508-dkhisu6b0pfqe45e6s7u5bjjpk146ghq',
-      client_secret: 'ZfqRRdj0kVoD6t9iloHVNVgO',
-      redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-      scope: 'SPACE SEPARATED LIST OF SCOPES'
+      client_id: '323290425508-nhdtn6u9qo2b07hukv3smfio21a4clbj',
+      client_secret: '18sjzLFeptAtBEIhOuRqkkdR',
+      redirect_uri: 'https://console.developers.google.com/apis/credentials',
+      scope: ''
     }).done(function(data) {
       $loginStatus.html('Access Token: ' + data.access_token);
     }).fail(function(data) {
       $loginStatus.html(data.error);
     });
   });
-});*/
+});
