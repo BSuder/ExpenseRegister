@@ -1,4 +1,8 @@
 
+var CLIENT_ID = '1074999519337-t50r3n6n5ah72fhpqp8d2p423pp74h9b.apps.googleusercontent.com'; // Client ID and API key from the Developer Console
+var API_KEY = 'AIzaSyD3XijftSrbAfYxGkmTq-hT48Uium9UWk0';
+var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"]; // Array of API discovery doc URLs for APIs used by the quickstart
+var SCOPES = "https://www.googleapis.com/auth/spreadsheets"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
 
 
 var SpreadsheetId  = '1XamrxyNC08EYGbGjZ5pe8p-RYZnAZLWh8x8jSncSRXw';
@@ -45,6 +49,8 @@ function SendExpense(value, name, category, recordIndex)
 		function(response)
 		{
 			console.log(response.result);
+			
+			// TODO: compare with limit
 		}, 
 		  
 		function(reason)
@@ -54,7 +60,53 @@ function SendExpense(value, name, category, recordIndex)
 	);
 }
 
+
+/************************************* AUTHORIZATION ********************************************/
+
+function handleClientLoad() // On load, called to load the auth2 library and API client library.
+{
+  gapi.load('client:auth2', initClient);
+}
+
+function initClient() // Initializes the API client library and sets up sign-in state listeners.
+{
+	gapi.client.init( {apiKey:API_KEY, clientId:CLIENT_ID, discoveryDocs:DISCOVERY_DOCS, scope:SCOPES} ).then
+	(
+		function()
+		{
+		  gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus); // Listen for sign-in state changes.
+		  updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get()); // Handle the initial sign-in state.
+		}
+	);
+}
+
+function updateSigninStatus(isSignedIn) // Called when the signed in status changes, to update the UI appropriately. After a sign-in, the API is called.
+{
+	if(isSignedIn)
+	{
+		document.getElementById('authorize-button').style.display = 'none';
+		document.getElementById('signout-button').style.display = 'block';
+	}
+	else
+	{
+		document.getElementById('authorize-button').style.display = 'block';
+		document.getElementById('signout-button').style.display = 'none';
+	}
+}
+
+function handleAuthClick() // Sign in the user upon button click.
+{
+	gapi.auth2.getAuthInstance().signIn();
+}
+
+function handleSignoutClick() // Sign out the user upon button click.
+{
+	gapi.auth2.getAuthInstance().signOut();
+}
+
+
 /**************************************** COMMON ***********************************************/
+
 function GetFormattedDate() {
     var date = new Date();
 	

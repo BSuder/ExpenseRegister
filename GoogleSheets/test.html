@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	
+		<title>Google Sheets API Quickstart</title>
+		<meta charset='utf-8' />
+		
+	</head>
+	
+	<body>
+	
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+		<script src="googleSheets.js"></script>
+
+		<div data-role="main" class="ui-content">
+			<p>Expense Register - test site</p>
+			<text> Value</text>
+			<input id="Value">
+			<text> Name</text>
+			<input id="Name">
+			<text> Category</text>
+			<input id="Category">
+			<button id="submit" onclick="submit()">Submit</button>
+			<button id="authorize-button" onclick="handleAuthClick()" style="display: none;">Authorize</button>
+			<button id="signout-button" onclick="handleSignoutClick()" style="display: none;">Sign Out</button>
+		</div>
+
+	</body>
+	  
+	<script async defer src="https://apis.google.com/js/api.js"
+	  onload="this.onload=function(){};handleClientLoad()"
+	  onreadystatechange="if (this.readyState === 'complete') this.onload()">
+	</script>
+  
+  
+	<script>
+	
+		function submit()
+		{
+			var value, nazwa, category;
+			
+			value = document.getElementById("Value").value;
+			name = document.getElementById("Name").value;
+			category = document.getElementById("Category").value;
+
+			AddExpense(value, name, category);
+		}
+		
+	</script>
+	
+</html>
+
+
+
+
+
