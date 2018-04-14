@@ -1,108 +1,103 @@
-<!--DOCTYPE html>
-<!html>
-	<head>
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-		<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-		<script src="https://apis.google.com/js/platform.js" async defer></script>
-		
-		
-		<meta name="google-signin-client_id" content="323290425508-nhdtn6u9qo2b07hukv3smfio21a4clbj.apps.googleusercontent.com">
-		
-		<script src="js/pgb.js"></script>
-		<script src="cordova.js"></script>
-		<script src="jquery.min.js"></script>
-	</head>
-	<body onload="init()">
-		<h1>Hello World!</h1>
-		<p id="dp"></p>
+<!--
+Copyright 2018 Google LLC
 
-		<div class="g-signin2" data-onsuccess="onSignIn()"></div>
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-		<input type="button" onclick="HTMLtext()" value="Return google!">
-		<input type="button" onclick="onSignIn()" value="Get user data">
-		<a href="#" onclick="signOut();">Sign out</a>
-		
-	</body>
-</html-->
+    https://www.apache.org/licenses/LICENSE-2.0
 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
 <html>
-<head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <script src="https://apis.google.com/js/api:client.js"></script>
-  <script>
-  var googleUser = {};
-  var startApp = function() {
-    gapi.load('auth2', function(){
-      // Retrieve the singleton for the GoogleAuth library and set up the client.
-      auth2 = gapi.auth2.init({
-        client_id: '323290425508-nhdtn6u9qo2b07hukv3smfio21a4clbj.apps.googleusercontent.com',
-        cookiepolicy: 'single_host_origin',
-        // Request scopes in addition to 'profile' and 'email'
-        //scope: 'additional_scope'
-      });
-      attachSignin(document.getElementById('customBtn'));
-    });
-  };
+  <head>
+    <title>Google Sheets API Quickstart</title>
+    <meta charset='utf-8' />
+  <body>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  function attachSignin(element) {
-    console.log(element.id);
-    auth2.attachClickHandler(element, {},
-        function(googleUser) {
-          document.getElementById('name').innerText = "Signed in: " +
-              googleUser.getBasicProfile().getName();
-        }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
-        });
+
+<div data-role="page" id="pageone">
+
+	<div data-role="header">
+		<h1><font size="8">Expense Register</font></h1>
+		<div class="container">   
+			<div class="row">
+				<div  width="25%" class="col-sm-2">
+					<button style="background-color:#0099FF;">Main</button>
+				</div>
+				<div  width="25%" class="col-sm-2">
+					<button>All efforts</button>
+				</div>
+				<div  width="25%" class="col-sm-2">
+					<button>History</button>
+				</div>
+				<div  width="25%" class="col-sm-2">
+					<button>Settings</button>
+				</div>
+				<div  width="25%" class="col-sm-2">
+					<button onclick="logout()">Log out</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+  <div data-role="main" class="ui-content">
+    <h2>Enter new expense</h2>
+	<text>Category:</text>
+	<select id="Category">
+		<option value="volvo">Volvo</option>
+		<option value="saab">Saab</option>
+		<option value="mercedes">Mercedes</option>
+		<option value="audi">Audi</option>
+	</select>
+	<text>Expense title:</text>
+		<input id="Title">
+	<text>Amount of effort</text>
+		<input id="Amount">
+	<button id="submit" onclick="getData()">Wyślij</button>
+   <a href="#pagetwo">Go to Page Two</a>
+  </div>
+  
+  
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+
+  </body>
+  <script>
+  var wydatek, nazwa, kategoria;
+  
+	function logout(){
+		alert("logout button clicked");
+	}
+  
+  function getData (){
+	
+	wydatek = document.getElementById("Category").value;
+	nazwa = document.getElementById("Title").value;
+	kategoria = document.getElementById("Amount").value;
+  
+	printData();
+  }
+  
+  function printData(){
+  alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
+  
   }
   </script>
-  <style type="text/css">
-    #customBtn {
-      display: inline-block;
-      background: white;
-      color: #444;
-      width: 190px;
-      border-radius: 5px;
-      border: thin solid #888;
-      box-shadow: 1px 1px 1px grey;
-      white-space: nowrap;
-    }
-    #customBtn:hover {
-      cursor: pointer;
-    }
-    span.label {
-      font-family: serif;
-      font-weight: normal;
-    }
-    span.icon {
-      background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
-      display: inline-block;
-      vertical-align: middle;
-      width: 42px;
-      height: 42px;
-    }
-    span.buttonText {
-      display: inline-block;
-      vertical-align: middle;
-      padding-left: 42px;
-      padding-right: 42px;
-      font-size: 14px;
-      font-weight: bold;
-      /* Use the Roboto font that is loaded in the <head> */
-      font-family: 'Roboto', sans-serif;
-    }
-  </style>
-  </head>
-  <body>
-  <!-- In the callback, you would hide the gSignInWrapper element on a
-  successful sign in -->
-  <div id="gSignInWrapper">
-    <span class="label">Sign in with:</span>
-    <div id="customBtn" class="customGPlusSignIn">
-      <span class="icon"></span>
-      <span class="buttonText">Google</span>
-    </div>
-  </div>
-  <div id="name"></div>
-  <script>startApp();</script>
-</body>
 </html>

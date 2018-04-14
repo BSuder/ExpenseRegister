@@ -22,42 +22,75 @@ limitations under the License.
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 <div data-role="page" id="pageone">
-  <div data-role="header">
-    <h1>insert Your data</h1>
-  </div>
+
+	<div data-role="header">
+		<h1><font size="8">Expense Register</font></h1>
+		<div class="container">   
+			<div class="row">
+				<div  width="25%" class="col-sm-2">
+					<button style="background-color:#0099FF;">Main</button>
+				</div>
+				<div  width="25%" class="col-sm-2">
+					<button>All efforts</button>
+				</div>
+				<div  width="25%" class="col-sm-2">
+					<button>History</button>
+				</div>
+				<div  width="25%" class="col-sm-2">
+					<button>Settings</button>
+				</div>
+				<div  width="25%" class="col-sm-2">
+					<button onclick="logout()">Log out</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
   <div data-role="main" class="ui-content">
-    <p>Welcome! If you click on the link below, it will take you to Page Two.</p>
-	<text> wydatek</text>
-	<input id="WYDATEK">
-	<text> nazwa</text>
-	<input id="NAZWA">
-	<text> kategoria</text>
-	<input id="CATEGORIA">
+    <h2>Enter new expense</h2>
+	<text>Category:</text>
+	<select id="Category">
+		<option value="volvo">Volvo</option>
+		<option value="saab">Saab</option>
+		<option value="mercedes">Mercedes</option>
+		<option value="audi">Audi</option>
+	</select>
+	<text>Expense title:</text>
+		<input id="Title">
+	<text>Amount of effort</text>
+		<input id="Amount">
 	<button id="submit" onclick="getData()">Wyślij</button>
    <a href="#pagetwo">Go to Page Two</a>
   </div>
+  
+  
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
 
-  <div data-role="footer">
-    <h1>Footer Text</h1>
-	<ul>
-  <li><a href="default.asp">Home</a></li>
-  <li><a href="news.asp">News</a></li>
-  <li><a href="contact.asp">Contact</a></li>
-  <li><a href="about.asp">About</a></li>
-</ul>
-  </div>
 </div> 
+
+
   </body>
   <script>
   var wydatek, nazwa, kategoria;
   
+	function logout(){
+		alert("logout button clicked");
+	}
+  
   function getData (){
 	
-	wydatek = document.getElementById("WYDATEK").value;
-	nazwa = document.getElementById("NAZWA").value;
-	kategoria = document.getElementById("CATEGORIA").value;
+	wydatek = document.getElementById("Category").value;
+	nazwa = document.getElementById("Title").value;
+	kategoria = document.getElementById("Amount").value;
   
 	printData();
   }
