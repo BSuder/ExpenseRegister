@@ -72,3 +72,65 @@ $(document).on('deviceready', function() {
     });
   });
 });
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// retrieve efforts by:
+/*
+	default -> current month
+	selected date range
+	category
+	created by
+*/
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// create and send message to insert new row 
+
+/*
+//	WORKFLOW:
+
+//	get range of total cells
+//	create message
+//	send message
+
+	//	helper functions:
+
+	//	genegateInputMessage
+	//	generateTimestamp
+	//	
+*/
+
+function sendInsertMessage(){
+	
+	// todo:
+	// funkcja pobierajaca ilosc rekordow
+	
+	var xmlHttp = new XMLHttpRequest();
+
+    xmlHttp.open( "POST", "https://www.google.pl", false ); // false for synchronous request, wstrzymuje dzialanie apki
+	// jest true trzeba czekac az sie wykona
+    xmlHttp.send( null );
+
+    navigator.notification.alert(xmlHttp.responseText);
+}
+
+function generateInputMessage( categoty, descr, vlaue, User){
+	
+	var Message ={
+	  "major_dimension" => "ROWS",
+	  "values" => [
+		 [categoty,descr,value,User, generateTimestamp()],
+	   ]
+	};
+
+	return Message; 
+}
+
+function generateTimestamp(){
+	var timestamp = new Date().getTime();
+	return timestamp;
+}
+
+function convertDateToTimestamp(year, month, day){
+	var newTimestamp = (year-1970)*31556926000 + (month-1)*2629743000 + (day-1)*86400000;
+	return newTimestamp;
+}
