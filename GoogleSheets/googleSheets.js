@@ -5,13 +5,23 @@ var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"
 var SCOPES = "https://www.googleapis.com/auth/spreadsheets"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
 
 
-var SpreadsheetId  = '1XamrxyNC08EYGbGjZ5pe8p-RYZnAZLWh8x8jSncSRXw';
+var SpreadsheetId  = '1Lk2Ni4po21fw1tbQp_4jL1kWcwapBil2OF3N2gMZmxs';
 
 var DateColumn     = "A";
 var ValueColumn    = "B";
 var NameColumn     = "C";
 var CategoryColumn = "D";
 var MaxRecordIndex = 500;
+
+var SummaryPosition = "G2:G10"
+
+var StartPosition   = 0;
+var EndPosition     = 1;
+var IncomePosition  = 3;
+var OutcomePosition = 4;
+var LimitPosition   = 6;
+var BalancePosition = 8;
+
 
 /************************************ ADD EXPENSE *******************************************/
 
@@ -49,8 +59,7 @@ function SendExpense(value, name, category, recordIndex)
 		function(response)
 		{
 			console.log(response.result);
-			
-			// TODO: compare with limit
+			CheckLimit();
 		}, 
 		  
 		function(reason)
@@ -60,6 +69,35 @@ function SendExpense(value, name, category, recordIndex)
 	);
 }
 
+function CheckLimit()
+{
+	var outcome;
+	var limit;
+	
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:SummaryPosition} ).then
+	(
+		function(response)
+		{
+			limit = response.result.values[LimitPosition];
+			outcome = response.result.values[OutcomePosition];
+			
+			if((limit == 0) || (limit == null))
+			{
+				return;
+			}
+			
+			if(outcome > limit)
+			{
+				alert("WARNING! Expense limit reached!");
+			}
+		}, 
+		  
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
 
 /************************************* AUTHORIZATION ********************************************/
 
