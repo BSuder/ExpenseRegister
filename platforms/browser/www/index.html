@@ -18,55 +18,44 @@ limitations under the License.
   <head>
     <title>Google Sheets API Quickstart</title>
     <meta charset='utf-8' />
-  <body>
+  <body onload="generateDropDown();">
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
-<div data-role="page" id="pageone">
+   <link rel="stylesheet" href="css/TopButtonsStyle.css">
+	
+<div data-role="page" id="pageone"  >
 
 	<div data-role="header">
-		<h1><font size="8">Expense Register</font></h1>
-		<div class="container">   
-			<div class="row">
-				<div  width="25%" class="col-sm-2">
-					<button style="background-color:#0099FF;">Main</button>
-				</div>
-				<div  width="25%" class="col-sm-2">
-					<button>All efforts</button>
-				</div>
-				<div  width="25%" class="col-sm-2">
-					<button>History</button>
-				</div>
-				<div  width="25%" class="col-sm-2">
-					<button>Settings</button>
-				</div>
-				<div  width="25%" class="col-sm-2">
-					<button onclick="logout()">Log out</button>
-				</div>
-			</div>
-		</div>
+		<h1><font size="4">Expense Register</font></h1>
+		
+		<section>
+			<nav>
+				<ul>
+				<li><a >Main</a></li>
+				<li><a >Summary</a></li>
+				<li><a >History</a></li>
+				<li><a >Settings</a></li>
+				<li><a >Log out</a></li>
+			</nav>
+		</section>
 	</div>
 
   <div data-role="main" class="ui-content">
     <h2>Enter new expense</h2>
 	<text>Category:</text>
-	<select id="Category">
-		<option value="volvo">Volvo</option>
-		<option value="saab">Saab</option>
-		<option value="mercedes">Mercedes</option>
-		<option value="audi">Audi</option>
+	<select id="Category" name="cat">
+		<option value="Undefined"></option>
 	</select>
 	<text>Expense title:</text>
 		<input id="Title">
 	<text>Amount of effort</text>
 		<input id="Amount">
-	<button id="submit" onclick="getData()">Wyślij</button>
-   <a href="#pagetwo">Go to Page Two</a>
+	<button id="submit" onclick="getData()">Submit</button>
+
   </div>
   
   
@@ -83,11 +72,12 @@ limitations under the License.
   var wydatek, nazwa, kategoria;
   
 	function logout(){
+	//	todo : akcja wylogowania z apluikacji
 		alert("logout button clicked");
 	}
   
   function getData (){
-	
+		// todo: funkcja wysyłania do GS 
 	wydatek = document.getElementById("Category").value;
 	nazwa = document.getElementById("Title").value;
 	kategoria = document.getElementById("Amount").value;
@@ -96,8 +86,17 @@ limitations under the License.
   }
   
   function printData(){
-  alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
+	alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
+  }
   
+  function generateDropDown(){
+	// to do: funckcja pobierania z GS ilości kategorii
+	// - Czy potrzeba wysyłać datę?
+	var jsonDataForBrands='[{"category":"QA","email":"a@b"},{"category":"PROD","email":"b@c"},{"category":"DEV","email":"c@d"}]';
+	var Categories=JSON.parse(jsonDataForBrands);
+	for (var catName in Categories) {
+		$('<option value="'+ Categories[catName].category+'">' + Categories[catName].category + '</option>').appendTo('#Category');
+    } 
   }
   </script>
 </html>
