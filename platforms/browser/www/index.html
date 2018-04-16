@@ -16,48 +16,44 @@ limitations under the License.
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Google Sheets API Quickstart</title>
-    <meta charset='utf-8' />
-  <body onload="generateDropDown();">
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-   <link rel="stylesheet" href="css/TopButtonsStyle.css">
+	<title>Google Sheets API Quickstart</title>
+	<meta charset='utf-8' />
+	<body onload="generateDropDown();">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/TopButtonsStyle.css">
+	<script src="js/frontEndHelper.js"></script>
 	
 <div data-role="page" id="pageone"  >
 
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
-		
-		<section>
-			<nav>
-				<ul>
-				<li><a >Main</a></li>
-				<li><a >Summary</a></li>
-				<li><a >History</a></li>
-				<li><a >Settings</a></li>
-				<li><a >Log out</a></li>
-			</nav>
-		</section>
+		<div  class="tile_div">
+			<button><b>Main</b></button>
+			<button><a>Summary</a></button>
+			<button><a>History</a></button>
+			<button><a>Settings</a></button>
+			<button onclick="logout()" ><a class="last">Log out</a></button>
+			<div class="clear"></div>
+		</div>
 	</div>
 
-  <div data-role="main" class="ui-content">
-    <h2>Enter new expense</h2>
-	<text>Category:</text>
-	<select id="Category" name="cat">
-		<option value="Undefined"></option>
-	</select>
-	<text>Expense title:</text>
-		<input id="Title">
-	<text>Amount of effort</text>
-		<input id="Amount">
-	<button id="submit" onclick="getData()">Submit</button>
-
-  </div>
-  
+	<div data-role="main" class="ui-content">
+		<h2>Enter new expense</h2>
+		<text>Category:</text>
+		<select id="Category" name="cat">
+			<option value="Undefined"></option>
+		</select>
+		<text>Expense title:</text>
+			<input id="Title">
+		<text>Amount of effort</text>
+			<input id="Amount">
+		<button id="submit" onclick="getData()">Submit</button>
+	</div>
   
 	<div data-role="footer">
 		<font size="2">Created by: eletele team</font>
@@ -68,23 +64,41 @@ limitations under the License.
 
 
   </body>
-  <script>
+  <!--script>
+
   var wydatek, nazwa, kategoria;
   
 	function logout(){
 	//	todo : akcja wylogowania z apluikacji
 		alert("logout button clicked");
 	}
+
+	 function repleaceComma(input){
+		var tmpStr = input.replace(',','.');
+		return tmpStr;
+	}
+
   
   function getData (){
-		// todo: funkcja wysyłania do GS 
-	wydatek = document.getElementById("Category").value;
+	//	pobranie z frontu danych
+	var tmp = document.getElementById("Amount").value;
 	nazwa = document.getElementById("Title").value;
-	kategoria = document.getElementById("Amount").value;
-  
-	printData();
+	kategoria = document.getElementById("Category").value;
+	// zamiana przecinka na kropke
+	tmp = repleaceComma(tmp);
+	//	sprawdzenie czy wpisana zmienna do pola amount jest liczbą
+	tmp = parseFloat(tmp);
+	if(isNaN(tmp)){
+		alert("Error, value in Amount of effort must be a number");
+	}
+	else{
+		return printData();
+	}
+	// to do wysłanie danych
+	
   }
   
+
   function printData(){
 	alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
   }
@@ -98,5 +112,5 @@ limitations under the License.
 		$('<option value="'+ Categories[catName].category+'">' + Categories[catName].category + '</option>').appendTo('#Category');
     } 
   }
-  </script>
+  </script-->
 </html>
