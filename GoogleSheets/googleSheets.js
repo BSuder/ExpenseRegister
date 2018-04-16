@@ -24,7 +24,10 @@ var OutcomeCategoryList = {};
 
 var MaxCategoryIndex = 21;
 
-var SummaryPosition = "G2:G10"
+var SummaryPosition = "G2:G10";
+
+var ExpenseListPosition = "A2:D500";
+var ExpenseList = {};
 
 var StartPosition   = 0;
 var EndPosition     = 1;
@@ -249,7 +252,7 @@ function UpdateCategoryLists()
 		function(response)
 		{
 			OutcomeCategoryList = response.result.values;
-			console.log("Income categories updated: " + OutcomeCategoryList);
+			console.log("Outcome categories updated: " + OutcomeCategoryList);
 		},
 		
 		function(reason)
@@ -257,8 +260,31 @@ function UpdateCategoryLists()
 			console.error('Error: ' + reason.result.error.message);
 		}
 	);
-	
-	
+}
+
+/************************************** EXPENSE LIST ********************************************/
+
+function UpdateCurrentExpenseList()
+{
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:ExpenseListPosition} ).then
+	(
+		function(response)
+		{
+			ExpenseList = response.result.values;
+			
+			console.log("Expense list updated");
+			
+			for(i = 0; i < ExpenseList.length; i++)
+			{
+				console.log(ExpenseList[i]);
+			}
+		},
+		
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
 }
 
 /************************************* AUTHORIZATION ********************************************/
@@ -278,7 +304,8 @@ function initClient() // Initializes the API client library and sets up sign-in 
 		  updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get()); // Handle the initial sign-in state.
 		  
 		  // ----------- on LOAD
-		  UpdateCategoryLists()
+		  UpdateCategoryLists();
+		  UpdateCurrentExpenseList();
 		}
 	);
 }

@@ -42,3 +42,14 @@ function UpdateCategoryLists()  ------------------------------------------------
 
 Robi update lokalnych list kategorii IncomeCategoryList oraz OutcomeCategoryList.
 Do wywołania przy starcie systemu i po każdej zmianie w listach kategorii.
+
+
+function UpdateCurrentExpenseList() --------------------------------------------
+
+Robi update lokalnej tablicy wydatków - do ustalenia w jaki sposób powinna być 
+procesowana później.
+
+
+
+
+
