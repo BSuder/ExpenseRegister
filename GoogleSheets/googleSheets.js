@@ -13,6 +13,17 @@ var NameColumn     = "C";
 var CategoryColumn = "D";
 var MaxRecordIndex = 500;
 
+var OutcomeCategoriesPosition = "I2:I21";
+var IncomeCategoriesPosition  = "L2:L21";
+
+var OutcomeCategoryColumn = "I";
+var IncomeCategoryColumn = "L";
+
+var IncomeCategoryList = {};
+var OutcomeCategoryList = {};
+
+var MaxCategoryIndex = 21;
+
 var SummaryPosition = "G2:G10"
 
 var StartPosition   = 0;
@@ -27,17 +38,41 @@ var BalancePosition = 8;
 
 function AddExpense(value, name, category)
 {	
+	var categoryFound = 0;
 	var recordIndex
 
+	for(i = 0; i < IncomeCategoryList.length; i++)
+	{
+		if(IncomeCategoryList[i] == category)
+		{
+			categoryFound = 1;
+			break;
+		}
+	}
+	
+	for(i = 0; i < OutcomeCategoryList.length; i++)
+	{
+		if(OutcomeCategoryList[i] == category)
+		{
+			categoryFound = 1;
+			break;
+		}
+	}
+	
+	if(categoryFound == 0)
+	{
+		alert("Category '" + category + "' not found!");
+	}
+	
 	// Search first free record
 	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:("B1:B" + MaxRecordIndex)} ).then
 	(
 		function(response)
 		{
-		  recordIndex = (response.result.values ? response.result.values.length : 0) + 1;
+		    recordIndex = (response.result.values ? response.result.values.length : 0) + 1;
 		  
-		  console.log("First free record found at: " + recordIndex);
-		  SendExpense(value, name, category, recordIndex)
+		    console.log("First free record found at: " + recordIndex);
+		    SendExpense(value, name, category, recordIndex)
 		},
 		
 		function(reason)
@@ -99,6 +134,133 @@ function CheckLimit()
 	);
 }
 
+/*************************************** CATEGORIES *********************************************/
+
+function AddCategory(categoryName, categoryType)
+{	
+	var coordinates;
+	var categoryIndex
+
+	for(i = 0; i < IncomeCategoryList.length; i++)
+	{
+		if(IncomeCategoryList[i] == categoryName)
+		{
+			alert("Category '" + categoryName + "' already exist! Please choose another category name.");
+			return;
+		}
+	}
+	
+	for(i = 0; i < OutcomeCategoryList.length; i++)
+	{
+		if(OutcomeCategoryList[i] == categoryName)
+		{
+			alert("Category '" + categoryName + "' already exist! Please choose another category name.");
+			return;
+		}
+	}
+	
+	coordinates = categoryType == "income" ? IncomeCategoriesPosition : OutcomeCategoriesPosition;
+
+	// Search first free category slot
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:coordinates} ).then
+	(
+		function(response)
+		{
+		    categoryIndex = (response.result.values ? response.result.values.length : 0) + 1 + 1;
+		  
+		    if(categoryIndex > MaxCategoryIndex)
+		    {
+			    alert("No more " + categoryType + " categories can be added.");
+				return;
+		    }
+		  
+		    console.log("First free " + categoryType + " category slot found at: " + categoryIndex);
+			
+			coordinates = (categoryType == "income" ? IncomeCategoryColumn : OutcomeCategoryColumn) + categoryIndex;
+			
+		    WriteCell(coordinates, categoryName, UpdateCategoryLists)
+		},
+		
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function DeleteCategory(categoryName)
+{
+	var coordinates;
+	indexFound = -1;
+	
+	for(i = 0; i < IncomeCategoryList.length; i++)
+	{
+		if(IncomeCategoryList[i] == categoryName)
+		{
+			coordinates = IncomeCategoryColumn + (i + 2);
+			indexFound = i;
+			break;
+		}
+	}
+	
+	for(i = 0; i < OutcomeCategoryList.length; i++)
+	{
+		if(OutcomeCategoryList[i] == categoryName)
+		{
+			coordinates = OutcomeCategoryColumn + (i + 2);
+			indexFound = i;
+			break;
+		}
+	}
+	
+	if(indexFound == -1)
+	{
+		alert("Category to delete not found!");
+		return;
+	}
+	
+	if(indexFound == 0)
+	{
+		alert("Unable to delete default category!");
+		return;
+	}
+	
+	WriteCell(coordinates, "", null);
+}
+
+function UpdateCategoryLists()
+{
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:IncomeCategoriesPosition} ).then
+	(
+		function(response)
+		{
+			IncomeCategoryList = response.result.values;
+			console.log("Income categories updated: " + IncomeCategoryList);
+		},
+		
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+	
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:OutcomeCategoriesPosition} ).then
+	(
+		function(response)
+		{
+			OutcomeCategoryList = response.result.values;
+			console.log("Income categories updated: " + OutcomeCategoryList);
+		},
+		
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+	
+	
+}
+
 /************************************* AUTHORIZATION ********************************************/
 
 function handleClientLoad() // On load, called to load the auth2 library and API client library.
@@ -114,6 +276,9 @@ function initClient() // Initializes the API client library and sets up sign-in 
 		{
 		  gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus); // Listen for sign-in state changes.
 		  updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get()); // Handle the initial sign-in state.
+		  
+		  // ----------- on LOAD
+		  UpdateCategoryLists()
 		}
 	);
 }
@@ -144,6 +309,29 @@ function handleSignoutClick() // Sign out the user upon button click.
 
 
 /**************************************** COMMON ***********************************************/
+
+function WriteCell(coordinate, value, callback)
+{
+	var body = {"range":coordinate, "majorDimension":"ROWS", "values":[[value]]};
+		
+	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinate, valueInputOption:'USER_ENTERED'}, body).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+			
+			if(callback != null)
+			{
+				callback();
+			}
+		}, 
+		  
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
 
 function GetFormattedDate() {
     var date = new Date();

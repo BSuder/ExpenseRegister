@@ -1,0 +1,44 @@
+function AddExpense(value, name, category) -------------------------------------
+
+Wyszukuje najbliższy wolny rekord i dodaje datę, kwotę, nazwę i kategorię. 
+
+#alerts
+- przekroczenie limitu wydatków
+- podana kategoria nie istnieje
+
+#params:
+- value:     kwota
+- name:      nazwa wydatku
+- category:  kategoria wydatku
+
+
+function AddCategory(categoryName, categoryType) -------------------------------
+
+Wyszukuje najbliższą wolną komórkę kategorii i dodaje ją. Max 20 kategorii (19 
+bez defaultowych) na typ.
+
+#alerts:
+- przekroczenie maximum 20 kategorii jednego typu
+- próba dodania już istniejącej kategorii
+
+#params:
+categoryName:  nazwa kategorii jaka ma być wpisana
+categoryType:  typ "income" lub "outcome"
+
+
+function DeleteCategory(categoryName) ------------------------------------------
+
+Usuwa kategorię o podanej nazwie.
+
+#alerts:
+- kategoria o podanej nazwie nie znaleziona
+- próba usunięcia kategorii defaultowej
+
+#params:
+- categoryName:  nazwa kategorii do usunięcia
+
+
+function UpdateCategoryLists()  ------------------------------------------------
+
+Robi update lokalnych list kategorii IncomeCategoryList oraz OutcomeCategoryList.
+Do wywołania przy starcie systemu i po każdej zmianie w listach kategorii.
