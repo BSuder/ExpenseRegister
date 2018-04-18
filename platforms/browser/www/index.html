@@ -18,7 +18,7 @@ limitations under the License.
   <head>
 	<title>Google Sheets API Quickstart</title>
 	<meta charset='utf-8' />
-	<body onload="generateDropDown();">
+	<body onload="generateBasicDropDown()">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
@@ -33,18 +33,18 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button><b>Main</b></button>
-			<button><a href="#Summary">Summary</a></button>
-			<button><a>History</a></button>
-			<button><a>Settings</a></button>
-			<button onclick="logout()" ><a class="last">Log out</a></button>
+			<button onclick="generateDropDown()"><b>Main</b></button>
+			<button onclick="getSummary()" ><a href="#Summary">Summary</a></button>
+			<button ><a href="#History">History</a></button>
+			<button ><a>Settings</a></button>
+			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
 	</div>
 
 	<div data-role="main" class="ui-content">
 		<h2>Enter new expense</h2>
-		<text>Category:</text>
+		<text>Category:</text> 
 		<select id="Category" name="cat">
 			<option value="Undefined"></option>
 		</select>
@@ -63,21 +63,52 @@ limitations under the License.
 </div> 
 
 <div data-role="page" id="Summary">
-
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
 			<button><a href="#pageone">Main</a></button>
-			<button><b>Summary</b></button>
-			<button><a>History</a></button>
-			<button><a>Settings</a></button>
-			<button onclick="logout()" ><a class="last">Log out</a></button>
+			<button  onclick="getSummary()"><b>Summary</b></button>
+			<button ><a href="#History">History</a></button>
+			<button ><a>Settings</a></button>
+			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
 	</div>
 
 	<div data-role="main" class="ui-content">
-		<h2>Here will be summary of all efforts</h2>
+		<h2 align="center">Summary of efforts</h2>
+		<div class="divTable greyGridTable">
+			<div class="divTableHeading">
+				<div class="divTableRow">
+					<div class="divTableHead">Categroy</div>
+					<div class="divTableHead">Value</div>
+				</div>
+			</div>
+			<div class="divTableBody" id="summaryBody">
+				<div class="divTableRow">
+					<div class="divTableCell">cell1_1</div>
+					<div class="divTableCell">cell2_1</div>
+				</div>
+				<div class="divTableRow">
+					<div class="divTableCell">cell1_2</div>
+					<div class="divTableCell">cell2_2</div>
+				</div>
+				<div class="divTableRow">
+					<div class="divTableCell">cell1_3</div>
+					<div class="divTableCell">cell2_3</div>
+				</div>
+				<div class="divTableRow">
+					<div class="divTableCell">cell1_4</div>
+					<div class="divTableCell">cell2_4</div>
+				</div>
+				</div>
+			<div class="divTableFoot tableFootStyle">
+				<div class="divTableRow">
+					<div class="divTableCell">Summary</div>
+					<div class="divTableCell">foot2</div>
+				</div>
+			</div>
+		</div>
 	</div>
   
 	<div data-role="footer">
@@ -87,6 +118,63 @@ limitations under the License.
 
 </div> 
 
+<div data-role="page" id="History">
+
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button ><a href="#pageone">Main</a></button>
+			<button ><a href="#Summary">Summary</a></button>
+			<button ><b>History</b></button>
+			<button ><a>Settings</a></button>
+			<button onclick="logout()" ><a class="last">Log out</a></button>
+			<div class="clear"></div>
+		</div>
+	</div>
+
+	<div data-role="main" class="ui-content">
+		<h2 align="center">History of efforts</h2>
+		<div class="divTable greyGridTable">
+			<div class="divTableHeading">
+				<div class="divTableRow">
+					<div class="divTableHead">Categroy</div>
+					<div class="divTableHead">Title</div>
+					<div class="divTableHead">Value</div>
+					<div class="divTableHead">Date</div>
+				</div>
+			</div>
+			<div class="divTableBody">
+				<div class="divTableRow">
+					<div class="divTableCell">cell1_1</div>
+					<div class="divTableCell">cell2_1</div>
+					<div class="divTableCell">cell3_1</div>
+				</div>
+				<div class="divTableRow">
+					<div class="divTableCell">cell1_2</div>
+					<div class="divTableCell">cell2_2</div>
+					<div class="divTableCell">cell3_2</div>
+				</div>
+				<div class="divTableRow">
+					<div class="divTableCell">cell1_3</div>
+					<div class="divTableCell">cell2_3</div>
+					<div class="divTableCell">cell3_3</div>
+				</div>
+				<div class="divTableRow">
+					<div class="divTableCell">cell1_4</div>
+					<div class="divTableCell">cell2_4</div>
+					<div class="divTableCell">cell3_4</div>
+				</div>
+				</div>
+
+		</div>
+	</div>
+  
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
 
   </body>
  

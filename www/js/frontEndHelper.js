@@ -35,12 +35,50 @@
 	alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
   }
   
-  function generateDropDown(){
-	// to do: funckcja pobierania z GS ilości kategorii
-	// - Czy potrzeba wysyłać datę?
-	var jsonDataForBrands='[{"category":"QA","email":"a@b"},{"category":"PROD","email":"b@c"},{"category":"DEV","email":"c@d"}]';
+	  function generateDropDown(){
+		// to do: funckcja pobierania z GS ilości kategorii
+		// - Czy potrzeba wysyłać datę?
+		var incomeCats='[{"category":"QA","email":"a@b"},{"category":"PROD","email":"b@c"},{"category":"nie ma sil","email":"c@d"},{"category":"MAAAM","email":"c@d"}]';
+		var NewCategories=JSON.parse(incomeCats);
+		
+		//add new categroy
+			for(var cat in NewCategories){
+				if(document.getElementById(NewCategories[cat].category)){
+				}else{
+					$('<option id="' + NewCategories[cat].category + '" value="' + NewCategories[cat].category + '">' + NewCategories[cat].category + '</option>').appendTo('#Category');
+				}
+			}
+		// delete one of category
+		
+	  }
+  
+    function generateBasicDropDown(){
+		// to do: funckcja pobierania z GS ilości kategorii
+		// - Czy potrzeba wysyłać datę?
+		var jsonDataForBrands='[{"category":"QA","email":"a@b"},{"category":"PROD","email":"b@c"},{"category":"DEV","email":"c@d"}]';
+		var Categories=JSON.parse(jsonDataForBrands);
+
+		for (var catName in Categories) {
+			$('<option id="'+ Categories[catName].category +'" value="'+ Categories[catName].category+'">' + Categories[catName].category + '</option>').appendTo('#Category');
+		
+		}
+	}
+  
+  function getSummary(){
+	  alert("ok");
+	//var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
+	
+	var table = document.getElementsByText('summaryBody');
+	alert(table);
+		if(table.innerHTML  == "cell1_1"){
+			alert("true");
+		}
+		else alert("false");
 	var Categories=JSON.parse(jsonDataForBrands);
 	for (var catName in Categories) {
-		$('<option value="'+ Categories[catName].category+'">' + Categories[catName].category + '</option>').appendTo('#Category');
+		$('<div class="divTableRow"><div class="divTableCell">' + Categories[catName].category + '</div><div class="divTableCell">' + Categories[catName].value + '</div>	</div>').appendTo('#summaryBody');
     } 
+	  
+	  
+//	<div class="divTableRow"><div class="divTableCell">' + cell1_2 + '</div><div class="divTableCell">' + cell2_2 + '</div>	</div>
   }
