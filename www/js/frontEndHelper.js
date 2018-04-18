@@ -50,7 +50,6 @@
 		}
 
 		// delete one of category
-		var currentCats = document.getElementById('Category').length;
 		var htmlObj = document.getElementById('Category');
 		
 		for(var i=1; i<=htmlObj.length;  i++){
@@ -76,20 +75,27 @@
 	}
   
   function getSummary(){
-	  alert("ok");
-	//var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
-	
-	var table = document.getElementsByText('summaryBody');
-	alert(table);
-		if(table.innerHTML  == "cell1_1"){
-			alert("true");
-		}
-		else alert("false");
+	alert("ok");
+	var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
 	var Categories=JSON.parse(jsonDataForBrands);
+
+	// printing new categories from GS
 	for (var catName in Categories) {
-		$('<div class="divTableRow"><div class="divTableCell">' + Categories[catName].category + '</div><div class="divTableCell">' + Categories[catName].value + '</div>	</div>').appendTo('#summaryBody');
+		$('<div id="' +Categories[catName].category+ '" class="divTableRow"><div class="divTableCell">' +Categories[catName].category+ '</div><div class="divTableCell">' +Categories[catName].value+ '</div></div>').appendTo('#testtable');
     } 
-	  
-	  
-//	<div class="divTableRow"><div class="divTableCell">' + cell1_2 + '</div><div class="divTableCell">' + cell2_2 + '</div>	</div>
+	
+	// delete not existing in GS
+	var htmlObj = document.getElementById("summaryBody");
+		alert(htmlObj.length);
+	for(var i=0; i<=htmlObj.length;  i++){
+		if(jsonDataForBrands.indexOf(htmlObj[i].value) != -1){
+		}else{
+			i--;
+			var elem = document.getElementById(htmlObj[i].value);
+			elem.parentNode.removeChild(elem);
+		}
+	}
+	
+	// set balance 
+	
   }
