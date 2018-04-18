@@ -35,22 +35,33 @@
 	alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
   }
   
-	  function generateDropDown(){
+	function generateDropDown(){
 		// to do: funckcja pobierania z GS ilości kategorii
 		// - Czy potrzeba wysyłać datę?
 		var incomeCats='[{"category":"QA","email":"a@b"},{"category":"PROD","email":"b@c"},{"category":"nie ma sil","email":"c@d"},{"category":"MAAAM","email":"c@d"}]';
 		var NewCategories=JSON.parse(incomeCats);
 		
 		//add new categroy
-			for(var cat in NewCategories){
-				if(document.getElementById(NewCategories[cat].category)){
-				}else{
-					$('<option id="' + NewCategories[cat].category + '" value="' + NewCategories[cat].category + '">' + NewCategories[cat].category + '</option>').appendTo('#Category');
-				}
+		for(var cat in NewCategories){
+			if(document.getElementById(NewCategories[cat].category)){
+			}else{
+				$('<option id="' + NewCategories[cat].category + '" value="' + NewCategories[cat].category + '">' + NewCategories[cat].category + '</option>').appendTo('#Category');
 			}
+		}
+
 		// delete one of category
+		var currentCats = document.getElementById('Category').length;
+		var htmlObj = document.getElementById('Category');
 		
-	  }
+		for(var i=1; i<=htmlObj.length;  i++){
+			if(incomeCats.indexOf(htmlObj[i].value) != -1){
+			}else{
+				i--;
+				var elem = document.getElementById(htmlObj[i].value);
+				elem.parentNode.removeChild(elem);
+			}
+		}
+	}
   
     function generateBasicDropDown(){
 		// to do: funckcja pobierania z GS ilości kategorii
