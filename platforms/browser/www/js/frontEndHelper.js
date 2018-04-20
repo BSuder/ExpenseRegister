@@ -75,27 +75,76 @@
 	}
   
   function getSummary(){
-	alert("ok");
+	  
 	var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
 	var Categories=JSON.parse(jsonDataForBrands);
 
-	// printing new categories from GS
+	var table = document.getElementById("testTable");
+
+	var tableCnt = $('#testTable tr').length;
+
+	// delete all inside rows
+	for(var i=1; i<tableCnt; i++){
+		table.deleteRow(1);			
+	}
+
+	// print new inside rows
 	for (var catName in Categories) {
-		$('<div id="' +Categories[catName].category+ '" class="divTableRow"><div class="divTableCell">' +Categories[catName].category+ '</div><div class="divTableCell">' +Categories[catName].value+ '</div></div>').appendTo('#testtable');
-    } 
-	
-	// delete not existing in GS
-	var htmlObj = document.getElementById("summaryBody");
-		alert(htmlObj.length);
-	for(var i=0; i<=htmlObj.length;  i++){
-		if(jsonDataForBrands.indexOf(htmlObj[i].value) != -1){
-		}else{
-			i--;
-			var elem = document.getElementById(htmlObj[i].value);
-			elem.parentNode.removeChild(elem);
-		}
+		// Create an empty <tr> element and add it to the 1st position of the table:
+		var row = table.insertRow(1);
+		// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		// Add some text to the new cells:
+		cell1.innerHTML = Categories[catName].category;
+		cell2.innerHTML = Categories[catName].value;
 	}
 	
 	// set balance 
+	table.deleteTFoot();
+	// Create an empty <tfoot> element and add it to the table:
+	var footer = table.createTFoot();
+
+	// Create an empty <tr> element and add it to the first position of <tfoot>:
+	var row = footer.insertRow(0);      
+
+	// Insert a new cell (<td>) at the first position of the "new" <tr> element:
+	var cell1 = row.insertCell(0);
+	var cell2 = row.insertCell(1);
+	var test= new Date().getTime().toString();
+	// Add some bold text in the new cell:
+	cell1.innerHTML = "<b>Balance</b>";
+	cell2.innerHTML = "<b>" +test+  "</b>";	
+  } 
+
+  function printHistory(){
+	  
+	var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
+	var Categories=JSON.parse(jsonDataForBrands);
+
+	var table = document.getElementById("historyTable");
+
+	var tableCnt = $('#historyTable tr').length;
+
+	// delete all inside rows
+	for(var i=1; i<tableCnt; i++){
+		table.deleteRow(1);			
+	}
+
+	// print new inside rows
+	for (var catName in Categories) {
+		// Create an empty <tr> element and add it to the 1st position of the table:
+		var row = table.insertRow(1);
+		// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		// Add some text to the new cells:
+		cell1.innerHTML = Categories[catName].category;
+		cell2.innerHTML = Categories[catName].value;
+		cell3.innerHTML = Categories[catName].value;
+		cell4.innerHTML = Categories[catName].value;
+	}
 	
   }
