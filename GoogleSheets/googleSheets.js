@@ -6,6 +6,7 @@ var SCOPES = "https://www.googleapis.com/auth/spreadsheets"; // Authorization sc
 
 
 var SpreadsheetId  = '1Lk2Ni4po21fw1tbQp_4jL1kWcwapBil2OF3N2gMZmxs';
+var TemplateSheetId = '1sme9DQeCuH1fuZCV_gU2I4dziQ_Kt4tS_rHe2kCTbZc'
 
 var DateColumn     = "A";
 var ValueColumn    = "B";
@@ -29,6 +30,11 @@ var SummaryPosition = "G2:G10";
 var ExpenseListPosition = "A2:D500";
 var ExpenseList = {};
 
+var TemplateSheetName = "newTemplate";
+
+var SheetList = {};
+var CurrentSheetName = "";
+
 var StartPosition   = 0;
 var EndPosition     = 1;
 var IncomePosition  = 3;
@@ -37,13 +43,21 @@ var LimitPosition   = 6;
 var BalancePosition = 8;
 
 
+/************************************** ON LOAD *********************************************/
+function OnWebpageLoad()
+{
+	UpdateCategoryLists();
+	UpdateSheetList();
+	UpdateCurrentExpenseList();
+}
+
 /************************************ ADD EXPENSE *******************************************/
 
 function AddExpense(value, name, category)
 {	
 	var categoryFound = 0;
 	var recordIndex
-
+				
 	for(i = 0; i < IncomeCategoryList.length; i++)
 	{
 		if(IncomeCategoryList[i] == category)
@@ -65,6 +79,7 @@ function AddExpense(value, name, category)
 	if(categoryFound == 0)
 	{
 		alert("Category '" + category + "' not found!");
+		return;
 	}
 	
 	// Search first free record
@@ -137,6 +152,130 @@ function CheckLimit()
 	);
 }
 
+/************************************ SHEET MANAGEMENT *******************************************/
+
+function AddNewMonthSheet() 
+{
+	var params = 
+	{
+		spreadsheetId: TemplateSheetId,
+		sheetId: 0,
+	};
+
+	var copySheetToAnotherSpreadsheetRequestBody = 
+	{
+		destinationSpreadsheetId: SpreadsheetId,
+	};
+
+	gapi.client.sheets.spreadsheets.sheets.copyTo(params, copySheetToAnotherSpreadsheetRequestBody).then
+	(
+		function(response)
+		{
+			console.log(response.result.sheetId);
+			
+			NameNewTemplate(response.result.sheetId);
+		}, 
+		
+		function(reason) 
+		{
+			console.error('error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function NameNewTemplate(id, callback)
+{	
+	var name = GenerateSheetName();
+
+	var params = 
+	{
+		spreadsheetId: SpreadsheetId,
+	};
+	
+	var batchUpdateSpreadsheetRequestBody = 
+	{
+		requests: 
+		[
+			{
+				"updateSheetProperties": 
+				{  
+					"properties": 
+					{
+						"sheetId": id,
+						"title": name,
+						"index": 0,
+					},
+					
+					"fields": "title, index",
+				},
+			}
+		],
+	};
+
+	gapi.client.sheets.spreadsheets.batchUpdate(params, batchUpdateSpreadsheetRequestBody).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+			UpdateSheetList();
+		}, 
+		
+		function(reason) 
+		{
+			console.error('error: ' + reason.result.error.message);
+		}
+	);	
+}
+
+function UpdateSheetList()
+{
+	gapi.client.sheets.spreadsheets.get({spreadsheetId: SpreadsheetId}).then
+	(
+		function(response) 
+		{
+			SheetList = response.result.sheets;
+			
+			console.log("Sheets updated:");
+			
+			for(i = 0; i < SheetList.length; i++)
+			{
+				console.log(SheetList[i].properties);
+			}
+			
+			CurrentSheetName = SheetList[0].properties.title;
+			
+			if(CurrentSheetName != GenerateSheetName())
+			{
+				AddNewMonthSheet();
+				return;
+			}
+		}, 
+
+		function(response) 
+		{
+			console.log('Error: ' + response.result.error.message);
+		}
+	);
+}
+
+function ImportCategoriesToNewSheet()
+{
+	
+}
+
+function SetNewSheetStartAmount()
+{
+	
+}
+
+function GenerateSheetName()
+{
+	var date = new Date();
+	//return ((date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + (date.getYear() - 100));
+	return "05.18";
+	
+}
+
 /*************************************** CATEGORIES *********************************************/
 
 function AddCategory(categoryName, categoryType)
@@ -181,7 +320,7 @@ function AddCategory(categoryName, categoryType)
 			
 			coordinates = (categoryType == "income" ? IncomeCategoryColumn : OutcomeCategoryColumn) + categoryIndex;
 			
-		    WriteCell(coordinates, categoryName, UpdateCategoryLists)
+		    WriteCell(coordinates, categoryName, UpdateCategoryLists(null))
 		},
 		
 		function(reason)
@@ -231,7 +370,7 @@ function DeleteCategory(categoryName)
 	WriteCell(coordinates, "", null);
 }
 
-function UpdateCategoryLists()
+function UpdateCategoryLists(callback)
 {
 	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:IncomeCategoriesPosition} ).then
 	(
@@ -239,20 +378,25 @@ function UpdateCategoryLists()
 		{
 			IncomeCategoryList = response.result.values;
 			console.log("Income categories updated: " + IncomeCategoryList);
-		},
-		
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-	
-	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:OutcomeCategoriesPosition} ).then
-	(
-		function(response)
-		{
-			OutcomeCategoryList = response.result.values;
-			console.log("Outcome categories updated: " + OutcomeCategoryList);
+			
+			gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:OutcomeCategoriesPosition} ).then
+			(
+				function(response)
+				{
+					OutcomeCategoryList = response.result.values;
+					console.log("Outcome categories updated: " + OutcomeCategoryList);
+					
+					if(callback != null)
+					{
+						callback();
+					}
+				},
+				
+				function(reason)
+				{
+					console.error('Error: ' + reason.result.error.message);
+				}
+			);
 		},
 		
 		function(reason)
@@ -274,6 +418,9 @@ function UpdateCurrentExpenseList()
 			
 			console.log("Expense list updated");
 			
+			if(ExpenseList == null)
+				return;
+			
 			for(i = 0; i < ExpenseList.length; i++)
 			{
 				console.log(ExpenseList[i]);
@@ -286,6 +433,7 @@ function UpdateCurrentExpenseList()
 		}
 	);
 }
+
 
 /************************************* AUTHORIZATION ********************************************/
 
@@ -303,9 +451,7 @@ function initClient() // Initializes the API client library and sets up sign-in 
 		  gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus); // Listen for sign-in state changes.
 		  updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get()); // Handle the initial sign-in state.
 		  
-		  // ----------- on LOAD
-		  UpdateCategoryLists();
-		  UpdateCurrentExpenseList();
+		  OnWebpageLoad();
 		}
 	);
 }
