@@ -28,6 +28,10 @@ limitations under the License.
 	<link rel="stylesheet" href="css/TopButtonsStyle.css">
 	<script src="js/frontEndHelper.js"></script>
 	
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- Numeric JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+	
 <div data-role="page" id="pageone"  >
 
 	<div data-role="header">
@@ -36,7 +40,7 @@ limitations under the License.
 			<button><b href="#pageone">Main</b></button>
 			<button onclick="getSummary()"><a href="#Summary">Summary</a></button>
 			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="alert()"><a href="#Settings">Settings</a></button>
+			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
 			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
@@ -46,7 +50,7 @@ limitations under the License.
 		<h2 align="center">Enter new expense</h2>
 		<text>Category:</text> 
 		<select id="Category" name="cat">
-			<option value="Undefined"></option>
+			<!--option value="Undefined"></option-->
 		</select>
 		<text>Expense title:</text>
 			<input id="Title">
@@ -69,7 +73,7 @@ limitations under the License.
 			<button><a href="#pageone">Main</a></button>
 			<button onclick="getSummary()"><b>Summary</b></button>
 			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="alert()"><a href="#Settings">Settings</a></button>
+			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
 			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
@@ -77,6 +81,9 @@ limitations under the License.
 
 	<div data-role="main" class="ui-content">
 		<h2 align="center">Summary of efforts</h2>
+		
+		<button onclick="Plotly.newPlot()">test</button>
+		<div id="myDiv"></div>
 
 		<table id="testTable" class="greyGridTable">
 		<thead>
@@ -103,7 +110,7 @@ limitations under the License.
 			<button><a href="#pageone">Main</a></button>
 			<button onclick="getSummary()"><a href = "#Summary">Summary</a></button>
 			<button onclick="printHistory()" ><b href="#History">History</b></button>
-			<button onclick="alert()"><a href="#Settings">Settings</a></button>
+			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
 			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
@@ -139,7 +146,7 @@ limitations under the License.
 			<button><a href="#pageone">Main</a></button>
 			<button onclick="getSummary()"><a href = "#Summary">Summary</a></button>
 			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="alert()"><b href="#Settings">Settings</b></button>
+			<button onclick="manageCategories()"><b href="#Settings">Settings</b></button>
 			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
@@ -147,7 +154,33 @@ limitations under the License.
 	
 	<div data-role="main" class="ui-content">
 		<h2 align="center">Settings </h2>
-		<text>do ustalenia jakie rzeczy maja byc ustawiane</text>
+		
+		<h3 align="center">Category management</h3>
+		<!--text>Category name</text>
+		<input id="NewCategory">
+		<form action="">
+		  <input type="radio" name="income" value="income">income<br>
+		  <input type="radio" name="outcome" value="outcome">outcome<br>
+		</form-->
+		<div>
+		<table id="Categories" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>Category</th>
+			<th>Type</th>
+			<th> </th>
+			</tr>
+			</thead>
+		</table>
+		</div>
+		<div  class="changes_div">
+			<button id="save" onclick="getData()">Save</button>
+			<button id="cancel" >Cancel</button>
+		</div>
+		<text align="center">Monthly balance</text>
+		<input id="balance"></input>
+		<button id="save" onclick="sendBalance()">Save</button>
+		
 	</div>
 
 	<div data-role="footer">

@@ -1,5 +1,9 @@
   var wydatek, nazwa, kategoria;
   
+  var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1}];
+  var Wydatki = JSON.parse('');
+  var History = JSON.parse('');
+  
 	function logout(){
 	//	todo : akcja wylogowania z apluikacji
 		alert("logout button clicked");
@@ -38,22 +42,23 @@
 	function generateDropDown(){
 		// to do: funckcja pobierania z GS ilości kategorii
 		// - Czy potrzeba wysyłać datę?
-		var incomeCats='[{"category":"QA","email":"a@b"},{"category":"PROD","email":"b@c"},{"category":"nie ma sil","email":"c@d"},{"category":"MAAAM","email":"c@d"}]';
-		var NewCategories=JSON.parse(incomeCats);
+		//var incomeCats='[{"category":"QA","email":"a@b"},{"category":"PROD","email":"b@c"},{"category":"nie ma sil","email":"c@d"},{"category":"MAAAM","email":"c@d"}]';
+		//var NewCategories=JSON.parse(incomeCats);
 		
 		//add new categroy
-		for(var cat in NewCategories){
-			if(document.getElementById(NewCategories[cat].category)){
+		for(var cat in Cats){
+			if(document.getElementById(Cats[cat].category)){
 			}else{
-				$('<option id="' + NewCategories[cat].category + '" value="' + NewCategories[cat].category + '">' + NewCategories[cat].category + '</option>').appendTo('#Category');
+				$('<option id="' + Cats[cat].category + '" value="' + Cats[cat].category + '">' + Cats[cat].category + '</option>').appendTo('#Category');
 			}
 		}
 
 		// delete one of category
+		var tmp = Cats.toString();
 		var htmlObj = document.getElementById('Category');
 		
 		for(var i=1; i<=htmlObj.length;  i++){
-			if(incomeCats.indexOf(htmlObj[i].value) != -1){
+			if(tmp.indexOf(htmlObj[i].value) != -1){
 			}else{
 				i--;
 				var elem = document.getElementById(htmlObj[i].value);
@@ -68,8 +73,8 @@
 		var jsonDataForBrands='[{"category":"QA","email":"a@b"},{"category":"PROD","email":"b@c"},{"category":"DEV","email":"c@d"}]';
 		var Categories=JSON.parse(jsonDataForBrands);
 
-		for (var catName in Categories) {
-			$('<option id="'+ Categories[catName].category +'" value="'+ Categories[catName].category+'">' + Categories[catName].category + '</option>').appendTo('#Category');
+		for (var catName in Cats) {
+			$('<option id="'+ Cats[catName].category +'" value="'+ Cats[catName].category+'">' + Cats[catName].category + '</option>').appendTo('#Category');
 		
 		}
 	}
@@ -148,3 +153,58 @@
 	}
 	
   }
+  
+  function sendBalance(){
+	  
+	//	pobranie z frontu danych
+	var tmp = document.getElementById("balance").value;
+	// zamiana przecinka na kropke
+	tmp = repleaceComma(tmp);
+	//	sprawdzenie czy wpisana zmienna do pola amount jest liczbą
+	wydatek = parseFloat(tmp);
+	if(isNaN(tmp)){
+		alert("Error, value in Amount of effort must be a number");
+	}
+	else{
+		return printData();
+	}
+	// to do wysłanie danych
+  
+  }
+  
+  function manageCategories(){
+	var table = document.getElementById("Categories");
+
+	var tableCnt = $('#Categories tr').length;
+
+	// delete all inside rows
+	for(var i=1; i<tableCnt; i++){
+		table.deleteRow(1);			
+	}
+	
+	var img = new Image();
+	img.src = 'img/del.png';
+
+	// print new inside rows
+	for (var catName=1; catName<Cats.length; catName++) {
+		// Create an empty <tr> element and add it to the 1st position of the table:
+		var row = table.insertRow(1);
+		// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		// Add some text to the new cells:
+		var tmp;
+		cell1.innerHTML = Cats[catName].category;
+		if(type == -1){
+			tmp = "Effort";
+		}
+		else{
+			tmp = "Income";
+		}
+		cell2.innerHTML = tmp;//Cats[catName].type;
+		cell3.innerHTML = img;
+	}
+  }
+
+  
