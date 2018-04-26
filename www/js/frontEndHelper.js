@@ -146,7 +146,7 @@
 			alert("Error, value in Amount of effort must be a number");
 		}
 		else{
-			return printData();
+			alert("nowy balans: " + tmp );
 		}
 		// to do wysłanie danych
 	}
