@@ -219,3 +219,16 @@
 		Cats.push(helperJSON);
 		manageCategories();
 	}
+	
+		function SaveNewAlarmLevel(){
+		var AlarmLevel = document.getElementById("EffortsAlarn").value;
+		
+		AlarmLevel = repleaceComma(AlarmLevel); 
+		AlarmLevel = parseFloat(AlarmLevel);
+		if(isNaN(AlarmLevel)){
+			alert("Error, value in Amount of effort must be a number");
+		}
+		else{
+			alert("nowy poziom alarmu: " + AlarmLevel );
+		}
+	}
