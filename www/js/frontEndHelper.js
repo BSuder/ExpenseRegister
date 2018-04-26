@@ -39,30 +39,16 @@
 	alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
   }
   
-  
-  // to do zmiana sposobu odswiezania kategorii
+
 	function generateDropDown(){
 		// to do: funckcja pobierania z GS ilości kategorii
-
-		//add new categroy
-		for(var cat in Cats){
-			if(document.getElementById(Cats[cat].category)){}
-			else{
-				$('<option id="' + Cats[cat].category + '" value="' + Cats[cat].category + '">' + Cats[cat].category + '</option>').appendTo('#Category');
-			}
-		}
-
-		// delete one of category
-		var tmp = Cats.toString();
-		var htmlObj = document.getElementById('Category');
 		
-		for(var i=1; i<=htmlObj.length;  i++){
-			if(tmp.indexOf(htmlObj[i].value) != -1){
-			}else{
-				i--;
-				var elem = document.getElementById(htmlObj[i].value);
-				elem.parentNode.removeChild(elem);
-			}
+		// delete current categories
+		$("#Category").children().remove();
+		// add retrieved categories
+		for(var cat in Cats){
+				$('<option id="' + Cats[cat].category + '" value="' + Cats[cat].category + '">' + Cats[cat].category + '</option>').appendTo('#Category');
+
 		}
 	}
   
