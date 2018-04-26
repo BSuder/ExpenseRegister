@@ -1,5 +1,4 @@
-  var wydatek, nazwa, kategoria;
-  
+
   var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1},{"category":"3 linia", "type":1}];
   var Wydatki = JSON.parse('');
   var History = JSON.parse('');
@@ -18,24 +17,24 @@
   function getNewEffort(){
 	//	pobranie z frontu danych
 	var tmp = document.getElementById("Amount").value;
-	nazwa = document.getElementById("Title").value;
-	kategoria = document.getElementById("Category").value;
+	var nazwa = document.getElementById("Title").value;
+	var kategoria = document.getElementById("Category").value;
 	// zamiana przecinka na kropke
 	tmp = repleaceComma(tmp);
 	//	sprawdzenie czy wpisana zmienna do pola amount jest liczbą
-	wydatek = parseFloat(tmp);
+	var wydatek = parseFloat(tmp);
 	if(isNaN(tmp)){
 		alert("Error, value in Amount of effort must be a number");
 	}
 	else{
-		return printData();
+		return printData(wydatek, nazwa, kategoria);
 	}
 	// to do wysłanie danych
 	
   }
   
 
-  function printData(){
+  function printData(wydatek, nazwa, kategoria){
 	alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
   }
   
@@ -204,8 +203,9 @@
   }
 	
 function deleteCategory(btn){
-	alert("wcisnieto przywcisk: " + btn);
-	delete Cats[btn];
+	// usuniecie kategorii 
+	Cats.splice(Cats[btn] - 1, 1);
+	// przeładowanie obecnych kategroii
 	manageCategories();
 }
   
