@@ -1,42 +1,47 @@
 
-  var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1},{"category":"3 linia", "type":1}];
-  var Wydatki = JSON.parse('');
-  var History = JSON.parse('');
-  
+var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1},{"category":"3 linia", "type":1}];
+var Wydatki = JSON.parse('');
+var History = JSON.parse('');
+ 
 	function logout(){
 	//	todo : akcja wylogowania z apluikacji
 		alert("logout button clicked");
 	}
 
-	 function repleaceComma(input){
+	function repleaceComma(input){
 		var tmpStr = input.replace(',','.');
 		return tmpStr;
 	}
-
-  
-  function getNewEffort(){
-	//	pobranie z frontu danych
-	var tmp = document.getElementById("Amount").value;
-	var nazwa = document.getElementById("Title").value;
-	var kategoria = document.getElementById("Category").value;
-	// zamiana przecinka na kropke
-	tmp = repleaceComma(tmp);
-	//	sprawdzenie czy wpisana zmienna do pola amount jest liczbą
-	var wydatek = parseFloat(tmp);
-	if(isNaN(tmp)){
-		alert("Error, value in Amount of effort must be a number");
-	}
-	else{
-		return printData(wydatek, nazwa, kategoria);
-	}
-	// to do wysłanie danych
 	
-  }
+	function toNumber(inStr){
+		inStr = repleaceComma(inStr);
+		inStr = parseFloat(inStr);
+		if(isNaN(inStr)){
+			alert("Error, value in Amount of effort must be a number");
+			return false;
+		}
+		else{
+			return inStr;
+		}
+		
+	}
+  
+	function getNewEffort(){
+		//	pobranie z frontu danych
+		var tmp = document.getElementById("Amount").value;
+		var nazwa = document.getElementById("Title").value;
+		var kategoria = document.getElementById("Category").value;
+		// zamiana przecinka na kropke
+		tmp = toNumber(tmp);
+		if(tmp != false) printData(tmp, nazwa, kategoria);
+		// to do wysłanie danych
+		
+	}
   
 
-  function printData(wydatek, nazwa, kategoria){
-	alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
-  }
+	function printData(wydatek, nazwa, kategoria){
+		alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
+	}
   
 
 	function generateDropDown(){
@@ -97,7 +102,7 @@
 	// Insert a new cell (<td>) at the first position of the "new" <tr> element:
 	var cell1 = row.insertCell(0);
 	var cell2 = row.insertCell(1);
-	var test= new Date().getTime().toString();
+	var test = new Date().getTime().toString();
 	// Add some bold text in the new cell:
 	cell1.innerHTML = "<b>Balance</b>";
 	cell2.innerHTML = "<b>" +test+  "</b>";	
@@ -142,11 +147,11 @@
 		tmp = repleaceComma(tmp);
 		//	sprawdzenie czy wpisana zmienna do pola amount jest liczbą
 		wydatek = parseFloat(tmp);
-		if(isNaN(tmp)){
+		if(isNaN(wydatek)){
 			alert("Error, value in Amount of effort must be a number");
 		}
 		else{
-			alert("nowy balans: " + tmp );
+			alert("nowy balans: " + wydatek );
 		}
 		// to do wysłanie danych
 	}
@@ -220,15 +225,9 @@
 		manageCategories();
 	}
 	
-		function SaveNewAlarmLevel(){
+	function SaveNewAlarmLevel(){
 		var AlarmLevel = document.getElementById("EffortsAlarn").value;
 		
-		AlarmLevel = repleaceComma(AlarmLevel); 
-		AlarmLevel = parseFloat(AlarmLevel);
-		if(isNaN(AlarmLevel)){
-			alert("Error, value in Amount of effort must be a number");
-		}
-		else{
-			alert("nowy poziom alarmu: " + AlarmLevel );
-		}
+		AlarmLevel =toNumber(AlarmLevel);
+		if(AlarmLevel!=false) alert("nowy poziom alarmu: " + AlarmLevel );
 	}
