@@ -51,6 +51,7 @@ limitations under the License.
 		<select id="Category" name="cat">
 			<!--option value="Undefined"></option-->
 		</select>
+		<div><i class="fas fa-camera-retro"></i></div>
 		<text>Expense title:</text>
 			<input id="Title">
 		<text>Amount of effort</text>
@@ -80,7 +81,12 @@ limitations under the License.
 
 	<div data-role="main" class="ui-content">
 		<h2 align="center">Summary of efforts</h2>
-
+		
+		<script src="https://static.anychart.com/js/8.0.1/anychart-core.min.js"></script>
+		<script src="https://static.anychart.com/js/8.0.1/anychart-pie.min.js"></script>
+		<div id=MasterGraph"> 
+			<div id="PieGraph"></div>
+		</div>
 		<table id="testTable" class="greyGridTable">
 			<thead>
 				<tr>

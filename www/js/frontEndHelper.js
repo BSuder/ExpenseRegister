@@ -2,6 +2,12 @@
 var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1},{"category":"3 linia", "type":1}];
 var Wydatki = JSON.parse('');
 var History = JSON.parse('');
+var json = {
+	"chart": {
+		"type": "pie",
+		"data": []
+	}
+};
  
 	function logout(){
 	//	todo : akcja wylogowania z apluikacji
@@ -38,12 +44,10 @@ var History = JSON.parse('');
 		
 	}
   
-
 	function printData(wydatek, nazwa, kategoria){
 		alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
 	}
   
-
 	function generateDropDown(){
 		// to do: funckcja pobierania z GS ilości kategorii
 		
@@ -70,6 +74,8 @@ var History = JSON.parse('');
 	var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
 	var Categories=JSON.parse(jsonDataForBrands);
 
+	printPie();
+	
 	var table = document.getElementById("testTable");
 
 	var tableCnt = $('#testTable tr').length;
@@ -230,4 +236,39 @@ var History = JSON.parse('');
 		
 		AlarmLevel =toNumber(AlarmLevel);
 		if(AlarmLevel!=false) alert("nowy poziom alarmu: " + AlarmLevel );
+	}
+
+	
+	function printPie() {
+	
+/*		document.getElementById("MasterGraph").children().remove();
+		//document.getElementById("MasterGraph").
+		//$(MasterGraph).append("<div id="PieGraph"></div>");
+		var tmpdiv = document.createElement('div');
+        $(tmpdiv).attr("id", "PieGraph");
+		*/
+		var tmp = [];
+		for(iter in Cats){
+			tmp.push([Cats[iter].category, Cats[iter].type]);
+		}
+
+		json = {
+			"chart": {
+				"type": "pie",
+				"data": tmp
+			}
+		};
+
+		// create the chart
+		var chart =  anychart.fromJson(json);
+
+		// display the chart in the container
+		chart.container('PieGraph');
+		// set legend position
+		chart.legend().position("right");
+		// set items layout
+		chart.legend().itemsLayout("vertical");
+		
+		chart.draw();
+
 	}
