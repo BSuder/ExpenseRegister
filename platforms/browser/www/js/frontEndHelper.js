@@ -2,6 +2,13 @@
 var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1},{"category":"3 linia", "type":1}];
 var Wydatki = JSON.parse('');
 var History = JSON.parse('');
+var json = {
+	"chart": {
+		"type": "pie",
+		"data": []
+	}
+};
+var chart;// = anychart.fromJson(json);;
  
 	function logout(){
 	//	todo : akcja wylogowania z apluikacji
@@ -33,17 +40,15 @@ var History = JSON.parse('');
 		var kategoria = document.getElementById("Category").value;
 		// zamiana przecinka na kropke
 		tmp = toNumber(tmp);
-		if(tmp != false) printData(tmp, nazwa, kategoria);
+		if(tmp != false) sendData(tmp, nazwa, kategoria);
 		// to do wysłanie danych
 		
 	}
   
-
-	function printData(wydatek, nazwa, kategoria){
+	function sendData(wydatek, nazwa, kategoria){
 		alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
 	}
   
-
 	function generateDropDown(){
 		// to do: funckcja pobierania z GS ilości kategorii
 		
@@ -63,6 +68,8 @@ var History = JSON.parse('');
 			$('<option id="'+ Cats[catName].category +'" value="'+ Cats[catName].category+'">' + Cats[catName].category + '</option>').appendTo('#Category');
 		
 		}
+		
+		generateBasicPie();
 	}
   
   function getSummary(){
@@ -70,6 +77,8 @@ var History = JSON.parse('');
 	var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
 	var Categories=JSON.parse(jsonDataForBrands);
 
+	printPie();
+	
 	var table = document.getElementById("testTable");
 
 	var tableCnt = $('#testTable tr').length;
@@ -106,6 +115,7 @@ var History = JSON.parse('');
 	// Add some bold text in the new cell:
 	cell1.innerHTML = "<b>Balance</b>";
 	cell2.innerHTML = "<b>" +test+  "</b>";	
+	
   } 
 
 	function printHistory(){
@@ -230,4 +240,61 @@ var History = JSON.parse('');
 		
 		AlarmLevel =toNumber(AlarmLevel);
 		if(AlarmLevel!=false) alert("nowy poziom alarmu: " + AlarmLevel );
+	}
+
+	function generateBasicPie() {
+
+		json = {
+			"chart": {
+				"type": "pie",
+				"data": ["no data", 1]
+			}
+		};
+
+		// create the chart
+		chart =  anychart.fromJson(json);
+
+		// display the chart in the container
+		chart.container('PieGraph');
+		// set legend position
+		chart.legend().position("right");
+		// set items layout
+		chart.legend().itemsLayout("vertical");
+		
+		chart.draw();
+
+	}
+	
+	function printPie() {
+
+		deletePie();
+	
+		var tmp = [];
+		for(iter in Cats){
+			tmp.push([Cats[iter].category, Cats[iter].type]);
+		}
+
+		json = {
+			"chart": {
+				"type": "pie",
+				"data": tmp
+			}
+		};
+
+		// create the chart
+		chart =  anychart.fromJson(json);
+
+		// display the chart in the container
+		chart.container('PieGraph');
+		// set legend position
+		chart.legend().position("right");
+		// set items layout
+		chart.legend().itemsLayout("vertical");
+		
+		chart.draw();
+
+	}
+	
+	function deletePie() {
+		$("#PieGraph").children().remove();
 	}
