@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="pl.patryk.expenseRegister" version="1.0.0" xmlns="http://www.w3.org/ns/widgets">
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="Notification">
+        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
+    </feature>
+    <feature name="GooglePlus">
+        <param name="android-package" value="nl.xservices.plugins.GooglePlus" />
+        <param name="onload" value="true" />
+    </feature>
+    <access origin="https://accounts.google.com/*" />
+    <name>Expense Register</name>
+    <description>My first mobile app</description>
+    <author email="zonb93@gmail.com" href="http://mypersonalwebsite.com">
+        Adam Włodarczyk
+        Bartosz Suder
+        Patryk Rębilas
+    </author>
+    <variable name="323290425508-dkhisu6b0pfqe45e6s7u5bjjpk146ghq" value="ZfqRRdj0kVoD6t9iloHVNVgO" />
+    <preference name="loglevel" value="DEBUG" />
+</widget>
