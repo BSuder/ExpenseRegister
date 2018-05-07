@@ -12,7 +12,7 @@
     </feature>
     <access origin="https://accounts.google.com/*" />
     <name>Expense Register</name>
-    <description>My first mobile app</description>
+    <description>Expense Register</description>
     <author email="zonb93@gmail.com" href="http://mypersonalwebsite.com">
         Adam Włodarczyk
         Bartosz Suder
