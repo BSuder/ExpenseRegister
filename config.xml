@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="pl.patryk.expenseRegister" version="1.0.0" xmlns="http://www.w3.org/ns/widgets">
     <name>Expense Register</name>
-    <description>My first mobile app</description>
+    <description>Expense Register</description>
     <author email="zonb93@gmail.com" href="http://mypersonalwebsite.com">
         Adam Włodarczyk
         Bartosz Suder
@@ -117,4 +117,7 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+	<link rel="stylesheet" href="css/TopButtonsStyle.css">
+	<link rel="stylesheet" href="css/MainPageStyle.css">
+	<script src="js/frontEndHelper.js"></script>
 </widget>

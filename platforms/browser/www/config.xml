@@ -10,5 +10,13 @@
         Bartosz Suder
         Patryk Rębilas
     </author>
-    <variable name="323290425508-dkhisu6b0pfqe45e6s7u5bjjpk146ghq" value="ZfqRRdj0kVoD6t9iloHVNVgO" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="android-minSdkVersion" value="14" />
 </widget>
