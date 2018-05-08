@@ -16,27 +16,500 @@ limitations under the License.
 <!DOCTYPE html>
 <html>
   <head>
-	<title>Google Sheets API Quickstart</title>
-	<meta charset='utf-8' />
-	<body onload="generateBasicDropDown()">
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="css/TopButtonsStyle.css">
-	<script src="js/frontEndHelper.js"></script>
+		<title>Google Sheets API Quickstart</title>
+		<meta charset='utf-8' />
+		
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+		
+		<!--link rel="stylesheet" href="css/TopButtonsStyle.css">
+		<link rel="stylesheet" href="css/MainPageStyle.css">
+		<script src="js/frontEndHelper.js"></script-->
+		<script>
+		
+var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1},{"category":"3 linia", "type":1}];
+var Wydatki = JSON.parse('');
+var History = JSON.parse('');
+var json = {
+	"chart": {
+		"type": "pie",
+		"data": []
+	}
+};
+var chart;// = anychart.fromJson(json);;
+ 
+	function logout(){
+	//	todo : akcja wylogowania z apluikacji
+		alert("logout button clicked");
+	}
+
+	function repleaceComma(input){
+		var tmpStr = input.replace(',','.');
+		return tmpStr;
+	}
+	
+	function toNumber(inStr){
+		inStr = repleaceComma(inStr);
+		inStr = parseFloat(inStr);
+		if(isNaN(inStr)){
+			alert("Error, value in Amount of effort must be a number");
+			return false;
+		}
+		else{
+			return inStr;
+		}
+		
+	}
+  
+	function getNewEffort(){
+		//	pobranie z frontu danych
+		var tmp = document.getElementById("Amount").value;
+		var nazwa = document.getElementById("Title").value;
+		var kategoria = document.getElementById("Category").value;
+		// zamiana przecinka na kropke
+		tmp = toNumber(tmp);
+		if(tmp != false) sendData(tmp, nazwa, kategoria);
+		// to do wysłanie danych
+		
+	}
+  
+	function sendData(wydatek, nazwa, kategoria){
+		alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
+	}
+  
+	function generateDropDown(){
+		// to do: funckcja pobierania z GS ilości kategorii
+		
+		// delete current categories
+		$("#Category").children().remove();
+		// add retrieved categories
+		for(var cat in Cats){
+				$('<option id="' + Cats[cat].category + '" value="' + Cats[cat].category + '">' + Cats[cat].category + '</option>').appendTo('#Category');
+
+		}
+	}
+  
+    function generateBasicDropDown(){
+		// to do: funckcja pobierania z GS ilości kategorii
+		// - Czy potrzeba wysyłać datę?
+		for (var catName in Cats) {
+			$('<option id="'+ Cats[catName].category +'" value="'+ Cats[catName].category+'">' + Cats[catName].category + '</option>').appendTo('#Category');
+		
+		}
+		
+		generateBasicPie();
+	}
+  
+  function getSummary(){
+	  
+	var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
+	var Categories=JSON.parse(jsonDataForBrands);
+
+	printPie();
+	
+	var table = document.getElementById("testTable");
+
+	var tableCnt = $('#testTable tr').length;
+
+	// delete all inside rows
+	for(var i=1; i<tableCnt; i++){
+		table.deleteRow(1);			
+	}
+
+	// print new inside rows
+	for (var catName in Categories) {
+		// Create an empty <tr> element and add it to the 1st position of the table:
+		var row = table.insertRow(1);
+		// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		// Add some text to the new cells:
+		cell1.innerHTML = Categories[catName].category;
+		cell2.innerHTML = Categories[catName].value;
+	}
+	
+	// set balance 
+	table.deleteTFoot();
+	// Create an empty <tfoot> element and add it to the table:
+	var footer = table.createTFoot();
+
+	// Create an empty <tr> element and add it to the first position of <tfoot>:
+	var row = footer.insertRow(0);      
+
+	// Insert a new cell (<td>) at the first position of the "new" <tr> element:
+	var cell1 = row.insertCell(0);
+	var cell2 = row.insertCell(1);
+	var test = new Date().getTime().toString();
+	// Add some bold text in the new cell:
+	cell1.innerHTML = "<b>Balance</b>";
+	cell2.innerHTML = "<b>" +test+  "</b>";	
+	
+  } 
+
+	function printHistory(){
+	  
+		var jsonDataForBrands='[{"category":"dochod","value":"a@b"},{"category":"odchod","value":"b@c"},{"category":"gowno","value":"c@d"}]';
+		var Categories=JSON.parse(jsonDataForBrands);
+
+		var table = document.getElementById("historyTable");
+
+		var tableCnt = $('#historyTable tr').length;
+
+		// delete all inside rows
+		for(var i=1; i<tableCnt; i++){
+			table.deleteRow(1);			
+		}
+
+		// print new inside rows
+		for (var catName in Categories) {
+			// Create an empty <tr> element and add it to the 1st position of the table:
+			var row = table.insertRow(1);
+			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			var cell3 = row.insertCell(2);
+			var cell4 = row.insertCell(3);
+			// Add some text to the new cells:
+			cell1.innerHTML = Categories[catName].category;
+			cell2.innerHTML = Categories[catName].value;
+			cell3.innerHTML = Categories[catName].value;
+			cell4.innerHTML = Categories[catName].value;
+		}
+	
+	}
+  
+	function sendBalance(){
+		//	pobranie z frontu danych
+		var tmp = document.getElementById("balance").value;
+		// zamiana przecinka na kropke
+		tmp = repleaceComma(tmp);
+		//	sprawdzenie czy wpisana zmienna do pola amount jest liczbą
+		wydatek = parseFloat(tmp);
+		if(isNaN(wydatek)){
+			alert("Error, value in Amount of effort must be a number");
+		}
+		else{
+			alert("nowy balans: " + wydatek );
+		}
+		// to do wysłanie danych
+	}
+  
+	function manageCategories(){
+
+		var table = document.getElementById("Categories");
+		var tableCnt = $('#Categories tr').length;
+		
+		// delete all inside rows
+		for(var i=1; i<tableCnt; i++){
+			table.deleteRow(1);			
+		}
+		
+		// dodanie ostatniej linijki
+		var helperChioce ="<select id=\"newCategoryType\"><option value=\"Income\">Income</option><option value=\"Effort\">Effort</option></select>";
+		var helperButton = "<button onclick=SaveNewCategory()><img src=\"img/save.png\" /></button>";
+		
+		var row = table.insertRow(1);
+		// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		
+		cell1.innerHTML = "<input id=\"newCategoryName\"></input>";
+		cell2.innerHTML = helperChioce;
+		cell3.innerHTML = helperButton;
+		
+		// print new inside rows
+		for (var catName in Cats) {
+			catName++;
+			// Create an empty <tr> element and add it to the 1st position of the table:
+			var row = table.insertRow(catName);
+			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			var cell3 = row.insertCell(2);
+			
+			var tmp;
+			if(Cats[catName].type == -1){
+				tmp = "Effort";
+			}
+			else{
+				tmp = "Income";
+			};
+			
+			// Add some text to the new cells:
+			cell1.innerHTML = Cats[catName].category;
+			cell2.innerHTML = tmp;
+			cell3.innerHTML = "<button onclick=deleteCategory("+catName+")><img src=\"img/del.png\" /></button>";
+		}
+
+	}
+	
+	function deleteCategory(btn){
+		// usuniecie kategorii 
+		Cats.splice(Cats[btn] - 1, 1);
+		// przeładowanie obecnych kategroii
+		manageCategories();
+	}
+
+	function SaveNewCategory(){
+		var CategotyName = document.getElementById("newCategoryName").value;
+		var CategoryType = document.getElementById("newCategoryType").value;
+		
+		if(CategoryType == "Income"){CategoryType = 1;}
+		else{CategoryType = -1;}
+		
+		var helperJSON = {"category":CategotyName, "type":CategoryType};
+		Cats.push(helperJSON);
+		manageCategories();
+	}
+	
+	function SaveNewAlarmLevel(){
+		var AlarmLevel = document.getElementById("EffortsAlarn").value;
+		
+		AlarmLevel =toNumber(AlarmLevel);
+		if(AlarmLevel!=false) alert("nowy poziom alarmu: " + AlarmLevel );
+	}
+
+	function generateBasicPie() {
+
+		json = {
+			"chart": {
+				"type": "pie",
+				"data": ["no data", 1]
+			}
+		};
+
+		// create the chart
+		chart =  anychart.fromJson(json);
+
+		// display the chart in the container
+		chart.container('PieGraph');
+		// set legend position
+		chart.legend().position("right");
+		// set items layout
+		chart.legend().itemsLayout("vertical");
+		
+		chart.draw();
+
+	}
+	
+	function printPie() {
+
+		deletePie();
+	
+		var tmp = [];
+		for(iter in Cats){
+			tmp.push([Cats[iter].category, Cats[iter].type]);
+		}
+
+		json = {
+			"chart": {
+				"type": "pie",
+				"data": tmp
+			}
+		};
+
+		// create the chart
+		chart =  anychart.fromJson(json);
+
+		// display the chart in the container
+		chart.container('PieGraph');
+		// set legend position
+		chart.legend().position("right");
+		// set items layout
+		chart.legend().itemsLayout("vertical");
+		
+		chart.draw();
+
+	}
+	
+	function deletePie() {
+		$("#PieGraph").children().remove();
+	}
+
+		</script>
+		<style>
+		body
+{
+	background-color : grey;
+}
+
+html, body, #PieGraph {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+button :hover  {
+	color: #dedee2;
+	background: #03072;
+	border: 1px solid blue;
+}
+
+.tile_div button {
+	width: 20%;
+	color : black;
+    background-color: #dfdefc; /* Green */
+	float: left;
+    border: 1px solid green;
+	border: 1px solid #1811dd;
+	border-radius: 5px;
+    color: white;
+    padding: 15px ;
+    text-align: center;
+    display: inline;
+    font-size: 10px;
+}
+
+.title_div a.last {
+    margin-right: 0;
+}
+
+.clear {
+    clear: both;
+}
+
+
+///////////
+div.greyGridTable {
+  border: 2px solid #FFFFFF;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+.divTable.greyGridTable .divTableCell, .divTable.greyGridTable .divTableHead {
+  border: 1px solid #FFFFFF;
+  padding: 3px 4px;
+}
+.divTable.greyGridTable .divTableBody .divTableCell {
+  font-size: 13px;
+}
+.divTable.greyGridTable .divTableCell:nth-child(even) {
+  background: #EBEBEB;
+}
+.divTable.greyGridTable .divTableHeading {
+  background: #FFFFFF;
+  border-bottom: 4px solid #333333;
+}
+.divTable.greyGridTable .divTableHeading .divTableHead {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333333;
+  text-align: center;
+  border-left: 2px solid #333333;
+}
+.divTable.greyGridTable .divTableHeading .divTableHead:first-child {
+  border-left: none;
+}
+
+.greyGridTable .tableFootStyle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333333;
+  border-top: 4px solid #333333;
+}
+.greyGridTable .tableFootStyle {
+  font-size: 14px;
+}
+/* DivTable.com */
+.divTable{ display: table; }
+.divTableRow { display: table-row; }
+.divTableHeading { display: table-header-group;}
+.divTableCell, .divTableHead { display: table-cell;}
+.divTableHeading { display: table-header-group;}
+.divTableFoot { display: table-footer-group;}
+.divTableBody { display: table-row-group;}
+
+
+
+
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;margin:0px auto;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#fff;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+.tg .headerTable{font-size:14px;border-color:inherit;vertical-align:center;text-align:center}
+.tg .tg-yw4l{vertical-align:center}
+.tg .categoryTableDetails{background-color:#BCBABA;vertical-align:center}
+
+
+table.greyGridTable {
+  border: 2px solid #FFFFFF;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.greyGridTable td, table.greyGridTable th {
+  border: 1px solid #FFFFFF;
+  padding: 3px 4px;
+}
+table.greyGridTable tbody td {
+  font-size: 13px;
+}
+table.greyGridTable td:nth-child(even) {
+  background: #EBEBEB;
+}
+table.greyGridTable thead {
+  background: #FFFFFF;
+  border-bottom: 4px solid #333333;
+}
+table.greyGridTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333333;
+  text-align: center;
+  border-left: 2px solid #333333;
+}
+table.greyGridTable thead th:first-child {
+  border-left: none;
+}
+
+table.greyGridTable tfoot {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333333;
+  border-top: 4px solid #333333;
+}
+table.greyGridTable tfoot td {
+  font-size: 14px;
+}
+
+.changes_div button {
+	width: 50%;
+	color : black;
+    background-color: #dfdefc; /* Green */
+	float: left;
+    border: 1px solid green;
+	border: 1px solid #1811dd;
+	border-radius: 5px;
+    color: white;
+    padding: 15px ;
+    text-align: center;
+    display: inline;
+    font-size: 13px;
+}
+		</style>
+	</head>
+	
+	
+<body onload="generateBasicDropDown()">
+
 	
 <div data-role="page" id="pageone"  >
 
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button><b href="#pageone">Main</b></button>
+			<button onclick="generateDropDown()"><b href="#pageone">Main</b></button>
 			<button onclick="getSummary()"><a href="#Summary">Summary</a></button>
 			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="alert()"><a href="#Settings">Settings</a></button>
+			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
 			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
@@ -46,13 +519,13 @@ limitations under the License.
 		<h2 align="center">Enter new expense</h2>
 		<text>Category:</text> 
 		<select id="Category" name="cat">
-			<option value="Undefined"></option>
 		</select>
+		<div><i class="fas fa-camera-retro"></i></div>
 		<text>Expense title:</text>
 			<input id="Title">
 		<text>Amount of effort</text>
 			<input id="Amount">
-		<button id="submit" onclick="getData()">Submit</button>
+		<button id="submit" onclick="getNewEffort()">Submit</button>
 	</div>
   
 	<div data-role="footer">
@@ -66,10 +539,10 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button><a href="#pageone">Main</a></button>
+			<button onclick="generateDropDown()"><a href="#pageone">Main</a></button>
 			<button onclick="getSummary()"><b>Summary</b></button>
 			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="alert()"><a href="#Settings">Settings</a></button>
+			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
 			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
@@ -77,14 +550,19 @@ limitations under the License.
 
 	<div data-role="main" class="ui-content">
 		<h2 align="center">Summary of efforts</h2>
-
+		
+		<script src="https://static.anychart.com/js/8.0.1/anychart-core.min.js"></script>
+		<script src="https://static.anychart.com/js/8.0.1/anychart-pie.min.js"></script>
+		<div id=MasterGraph"> 
+			<div id="PieGraph"></div>
+		</div>
 		<table id="testTable" class="greyGridTable">
-		<thead>
-		<tr>
-		<th>Category</th>
-		<th>Amount</th>
-		</tr>
-		</thead>
+			<thead>
+				<tr>
+					<th>Category</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
 		</table>
 	</div>
   
@@ -100,10 +578,10 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button><a href="#pageone">Main</a></button>
+			<button onclick="generateDropDown()"><a href="#pageone">Main</a></button>
 			<button onclick="getSummary()"><a href = "#Summary">Summary</a></button>
 			<button onclick="printHistory()" ><b href="#History">History</b></button>
-			<button onclick="alert()"><a href="#Settings">Settings</a></button>
+			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
 			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
@@ -136,10 +614,10 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button><a href="#pageone">Main</a></button>
+			<button onclick="generateDropDown()"><a href="#pageone">Main</a></button>
 			<button onclick="getSummary()"><a href = "#Summary">Summary</a></button>
 			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="alert()"><b href="#Settings">Settings</b></button>
+			<button onclick="manageCategories()"><b href="#Settings">Settings</b></button>
 			<button ><a class="last">Log out</a></button>
 			<div class="clear"></div>
 		</div>
@@ -147,7 +625,29 @@ limitations under the License.
 	
 	<div data-role="main" class="ui-content">
 		<h2 align="center">Settings </h2>
-		<text>do ustalenia jakie rzeczy maja byc ustawiane</text>
+		
+		<h3 align="center">Category management</h3>
+
+		<div>
+		<table id="Categories" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>Category</th>
+			<th>Type</th>
+			<th></th>
+			</tr>
+			</thead>
+		</table>
+		</div>
+	
+		<h4 align="center">Monthly balance</h4>
+		<input id="balance"></input>
+		<button id="saveBalance" onclick="sendBalance()">Save</button>
+		
+		<h4 align="center">Alarm of high efforts</h4>
+		<input id="EffortsAlarn"></input>
+		<button id="saveAlarm" onclick="SaveNewAlarmLevel()">Save</button>
+		
 	</div>
 
 	<div data-role="footer">

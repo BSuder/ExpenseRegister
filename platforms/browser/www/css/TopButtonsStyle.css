@@ -17,7 +17,7 @@
 
 .tile_div button b {
 	width: 18%;
-	color : black;
+	color : black;a
     background-color: #dfdefc;
 	float: left;
     border: 1px solid green;
@@ -161,4 +161,19 @@ table.greyGridTable tfoot {
 }
 table.greyGridTable tfoot td {
   font-size: 14px;
+}
+
+.changes_div button {
+	width: 50%;
+	color : black;
+    background-color: #dfdefc; /* Green */
+	float: left;
+    border: 1px solid green;
+	border: 1px solid #1811dd;
+	border-radius: 5px;
+    color: white;
+    padding: 15px ;
+    text-align: center;
+    display: inline;
+    font-size: 13px;
 }
