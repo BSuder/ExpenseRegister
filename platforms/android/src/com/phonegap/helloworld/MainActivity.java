@@ -17,7 +17,7 @@
        under the License.
  */
 
-package pl.patryk.expenseRegister;
+package com.phonegap.helloworld;
 
 import android.os.Bundle;
 import org.apache.cordova.*;
