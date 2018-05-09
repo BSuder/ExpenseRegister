@@ -46,8 +46,6 @@ var OutcomePosition = 4;
 var LimitPosition   = 6;
 var BalancePosition = 8;
 
-var TestVar = 156;
-
 function LocalSpreadsheetList()
 {
 	return SpreadsheetList;
@@ -454,7 +452,7 @@ function AddCategory(categoryName, categoryType)
 			
 			coordinates = (categoryType == "income" ? IncomeCategoryColumn : OutcomeCategoryColumn) + categoryIndex;
 			
-		    WriteCell(coordinates, categoryName, UpdateCategoryLists(null))
+		    UpdateSingleCategory(coordinates, categoryName);
 		},
 		
 		function(reason)
@@ -501,11 +499,13 @@ function DeleteCategory(categoryName)
 		return;
 	}
 	
-	WriteCell(coordinates, "", null);
+	UpdateSingleCategory(coordinates, "");
 }
 
 function UpdateCategoryLists(callback)
 {
+	console.log("Updating categories..");
+	
 	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:IncomeCategoriesPosition} ).then
 	(
 		function(response)
@@ -617,7 +617,7 @@ function handleSignoutClick() // Sign out the user upon button click.
 
 /**************************************** COMMON ***********************************************/
 
-function WriteCell(coordinate, value, callback)
+function UpdateSingleCategory(coordinate, value, callback)
 {
 	var body = {"range":coordinate, "majorDimension":"ROWS", "values":[[value]]};
 		
@@ -627,10 +627,7 @@ function WriteCell(coordinate, value, callback)
 		{
 			console.log(response.result);
 			
-			if(callback != null)
-			{
-				callback();
-			}
+			UpdateCategoryLists();
 		}, 
 		  
 		function(reason)
