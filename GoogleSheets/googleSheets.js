@@ -5,6 +5,8 @@ var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"
 var SCOPES = "https://www.googleapis.com/auth/spreadsheets"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
 
 
+var NewSpreadsheet = 0;
+
 var SpreadsheetId  = '1Lk2Ni4po21fw1tbQp_4jL1kWcwapBil2OF3N2gMZmxs';
 var TemplateSheetId = '1sme9DQeCuH1fuZCV_gU2I4dziQ_Kt4tS_rHe2kCTbZc'
 
@@ -218,7 +220,15 @@ function NameNewTemplate(id, callback)
 			console.log(response.result);
 			UpdateSheetList();
 			
-			ImportCategoriesToNewSheet();
+			if(NewSpreadsheet == 0)
+			{
+				ImportCategoriesToNewSheet();
+			}
+			else
+			{
+				SaveSpreadsheetToFirebase();
+				DeleteDefaultSheet();
+			}
 		}, 
 		
 		function(reason) 
@@ -247,6 +257,7 @@ function UpdateSheetList()
 			
 			if(CurrentSheetName != GenerateSheetName())
 			{
+				NewSpreadsheet = 0;
 				AddNewMonthSheet();
 				return;
 			}
@@ -304,6 +315,65 @@ function GenerateSheetName()
 	//return ((date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + (date.getYear() - 100));
 	return "06.18";
 	
+}
+
+/********************************* SPREADSHEET MANAGEMENT ****************************************/
+
+
+function CreateNewSpreadsheet(name) {
+	
+	gapi.client.sheets.spreadsheets.create({},{"properties": {"title": name}}).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+			SpreadsheetId = response.result.spreadsheetId;
+			NewSpreadsheet = 1;
+			AddNewMonthSheet();
+		}, 
+		
+		function(reason)
+		{
+			console.error('error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function SaveSpreadsheetToFirebase()
+{
+	console.log("SAVE TO FIREBASE");
+}
+
+function DeleteDefaultSheet()
+{
+	var params = 
+	{
+		spreadsheetId: SpreadsheetId,
+	};
+	
+	var batchUpdateSpreadsheetRequestBody = 
+	{
+		requests: 
+		[
+			{
+				"deleteSheet":{"sheetId": 0}
+			}
+		],
+	};
+
+	gapi.client.sheets.spreadsheets.batchUpdate(params, batchUpdateSpreadsheetRequestBody).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+			UpdateSheetList();
+		}, 
+		
+		function(reason) 
+		{
+			console.error('error: ' + reason.result.error.message);
+		}
+	);	
 }
 
 /*************************************** CATEGORIES *********************************************/
