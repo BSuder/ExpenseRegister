@@ -56,7 +56,9 @@
 			//AddCategory(value, "income");
 			//DeleteCategory(value);
 			//AddSheet(name);
-			SetExpenseLimit(1050);
+			//SetExpenseLimit(1050);
+			UpdateExpenseList(value, OnExpenseListUpdated);
+			
 		}
 		
 		function SelectSpreadsheet()
@@ -70,6 +72,13 @@
 			console.log(spreadsheetId);
 			
 			ChooseExistingSpreadsheet(spreadsheetId);
+		}
+		
+		function OnExpenseListUpdated()
+		{
+			var expl = LocalExpenseList();
+			
+			console.log(expl);
 		}
 		
 	</script>

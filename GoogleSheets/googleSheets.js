@@ -53,6 +53,10 @@ function LocalSpreadsheetList()
 	return SpreadsheetList;
 }
 
+function LocalExpenseList()
+{
+	return ExpenseList;
+}
 
 /************************************** ON LOAD *********************************************/
 function OnWebpageLoad()
@@ -584,9 +588,9 @@ function UpdateSingleCategory(coordinate, value)
 
 /************************************** EXPENSE LIST ********************************************/
 
-function UpdateCurrentExpenseList()
+function UpdateExpenseList(month, callback)
 {
-	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:ExpenseListPosition} ).then
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:month + "!" + ExpenseListPosition} ).then
 	(
 		function(response)
 		{
@@ -600,6 +604,11 @@ function UpdateCurrentExpenseList()
 			for(i = 0; i < ExpenseList.length; i++)
 			{
 				console.log(ExpenseList[i]);
+			}
+			
+			if(callback != null)
+			{
+				callback();
 			}
 		},
 		
