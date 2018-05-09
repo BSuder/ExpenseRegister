@@ -17,6 +17,8 @@ var NameColumn     = "C";
 var CategoryColumn = "D";
 var MaxRecordIndex = 500;
 
+var LimitCellPosition = "G8";
+
 var OutcomeCategoriesPosition = "I2:I21";
 var IncomeCategoriesPosition  = "L2:L21";
 
@@ -160,6 +162,25 @@ function CheckLimit()
 		}
 	);
 }
+
+function SetExpenseLimit(value)
+{
+	var body = {"range":LimitCellPosition, "majorDimension":"ROWS", "values":[[value]]};
+		
+	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:LimitCellPosition, valueInputOption:'USER_ENTERED'}, body).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+		}, 
+		  
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
 
 /************************************ SHEET MANAGEMENT *******************************************/
 function AddNewMonthSheet() 
@@ -540,6 +561,27 @@ function UpdateCategoryLists(callback)
 	);
 }
 
+function UpdateSingleCategory(coordinate, value)
+{
+	var body = {"range":coordinate, "majorDimension":"ROWS", "values":[[value]]};
+		
+	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinate, valueInputOption:'USER_ENTERED'}, body).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+			
+			UpdateCategoryLists();
+		}, 
+		  
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+
 /************************************** EXPENSE LIST ********************************************/
 
 function UpdateCurrentExpenseList()
@@ -617,25 +659,6 @@ function handleSignoutClick() // Sign out the user upon button click.
 
 /**************************************** COMMON ***********************************************/
 
-function UpdateSingleCategory(coordinate, value, callback)
-{
-	var body = {"range":coordinate, "majorDimension":"ROWS", "values":[[value]]};
-		
-	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinate, valueInputOption:'USER_ENTERED'}, body).then
-	(
-		function(response)
-		{
-			console.log(response.result);
-			
-			UpdateCategoryLists();
-		}, 
-		  
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-}
 
 function GetFormattedDate() {
     var date = new Date();
