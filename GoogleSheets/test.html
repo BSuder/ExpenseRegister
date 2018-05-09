@@ -57,8 +57,21 @@
 			//DeleteCategory(value);
 			//AddSheet(name);
 			//SetExpenseLimit(1050);
-			UpdateExpenseList(value, OnExpenseListUpdated);
+			//UpdateExpenseList(value, OnExpenseListUpdated);
+			UpdateSummary(value, displaySummary);
 			
+		}
+		
+		function displaySummary()
+		{
+			console.log(GetLocalOutcomeSummary());
+			console.log(GetLocalIncomeSummary());
+			console.log(GetLocalSummaryStart());
+			console.log(GetLocalSummaryEnd());
+			console.log(GetLocalSummaryIncome());
+			console.log(GetLocalSummaryOutcome());
+			console.log(GetLocalSummaryLimit());
+			console.log(GetLocalSummaryBalance());
 		}
 		
 		function SelectSpreadsheet()

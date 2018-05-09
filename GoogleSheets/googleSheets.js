@@ -30,7 +30,7 @@ var OutcomeCategoryList = {};
 
 var MaxCategoryIndex = 21;
 
-var SummaryPosition = "G2:G10";
+
 
 var ExpenseListPosition = "A2:D500";
 var ExpenseList = {};
@@ -47,6 +47,24 @@ var IncomePosition  = 3;
 var OutcomePosition = 4;
 var LimitPosition   = 6;
 var BalancePosition = 8;
+
+var OutcomeCatSummaryPosition = "I2:J21";
+var IncomeCatSummaryPosition = "L2:M21";
+var SummaryPosition = "G2:G10";
+
+var SummaryList = {};
+var OutcomeSummary = {};
+var IncomeSummary = {};
+
+function GetLocalOutcomeSummary(){return OutcomeSummary;}
+function GetLocalIncomeSummary(){return IncomeSummary;}
+function GetLocalSummaryStart(){return SummaryList[StartPosition];}
+function GetLocalSummaryEnd(){return SummaryList[EndPosition];}
+function GetLocalSummaryIncome(){return SummaryList[IncomePosition];}
+function GetLocalSummaryOutcome(){return SummaryList[OutcomePosition];}
+function GetLocalSummaryLimit(){return SummaryList[LimitPosition];}
+function GetLocalSummaryBalance(){return SummaryList[BalancePosition];}
+
 
 function LocalSpreadsheetList()
 {
@@ -619,7 +637,57 @@ function UpdateExpenseList(month, callback)
 	);
 }
 
-
+/************************************** SUMMARY ********************************************/
+function UpdateSummary(month, callback)
+{
+	// Get total summary
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:month + "!" + SummaryPosition} ).then
+	(
+		function(response)
+		{
+			SummaryList = response.result.values;
+			console.log(SummaryList);
+			
+			gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:month + "!" + OutcomeCatSummaryPosition} ).then
+			(
+				function(response)
+				{
+					OutcomeSummary = response.result.values;
+					console.log(OutcomeSummary);
+					
+					gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:month + "!" + IncomeCatSummaryPosition} ).then
+					(
+						function(response)
+						{
+							IncomeSummary = response.result.values;
+							console.log(IncomeSummary);
+							
+							
+							if(callback != null)
+							{
+								callback();
+							}
+						}, 
+						  
+						function(reason)
+						{
+							console.error('Error: ' + reason.result.error.message);
+						}
+					);
+				}, 
+				function(reason)
+				{
+					console.error('Error: ' + reason.result.error.message);
+				}
+			);
+		}, 
+		  
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
 /************************************* AUTHORIZATION ********************************************/
 
 function handleClientLoad() // On load, called to load the auth2 library and API client library.
