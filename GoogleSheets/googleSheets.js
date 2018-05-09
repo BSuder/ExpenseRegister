@@ -1,9 +1,10 @@
 
 var CLIENT_ID = '1074999519337-t50r3n6n5ah72fhpqp8d2p423pp74h9b.apps.googleusercontent.com'; // Client ID and API key from the Developer Console
 var API_KEY = 'AIzaSyD3XijftSrbAfYxGkmTq-hT48Uium9UWk0';
-var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"]; // Array of API discovery doc URLs for APIs used by the quickstart
-var SCOPES = "https://www.googleapis.com/auth/spreadsheets"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
+var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4", "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]; // Array of API discovery doc URLs for APIs used by the quickstart
+var SCOPES = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.metadata.readonly"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
 
+var TemplateCheckString = "ExpenseRegisterTemplate by EleteleTeam";
 
 var NewSpreadsheet = 0;
 
@@ -35,6 +36,7 @@ var ExpenseList = {};
 var TemplateSheetName = "newTemplate";
 
 var SheetList = {};
+var SpreadsheetList;
 var CurrentSheetName = "";
 
 var StartPosition   = 0;
@@ -43,6 +45,13 @@ var IncomePosition  = 3;
 var OutcomePosition = 4;
 var LimitPosition   = 6;
 var BalancePosition = 8;
+
+var TestVar = 156;
+
+function LocalSpreadsheetList()
+{
+	return SpreadsheetList;
+}
 
 
 /************************************** ON LOAD *********************************************/
@@ -376,6 +385,31 @@ function DeleteDefaultSheet()
 	);	
 }
 
+function GetSpreadsheetList(callback)
+{
+	gapi.client.drive.files.list({'pageSize': 20, 'fields': "nextPageToken, files(id, name)", 'q' : "fullText contains '" + TemplateCheckString + "'"}).then
+	(
+		function(response)
+		{
+			console.log(response.result.files);
+			
+			SpreadsheetList = response.result.files;
+			
+			if(callback != null)
+			{
+				callback();
+			}
+		}
+	);
+}
+
+function ChooseExistingSpreadsheet(spreadsheetId)
+{
+	SpreadsheetId = spreadsheetId;
+	UpdateCategoryLists(UpdateSheetList);
+	SaveSpreadsheetToFirebase();
+}
+
 /*************************************** CATEGORIES *********************************************/
 
 function AddCategory(categoryName, categoryType)
@@ -494,14 +528,14 @@ function UpdateCategoryLists(callback)
 				
 				function(reason)
 				{
-					console.error('Error: ' + reason.result.error.message);
+					console.error(reason);
 				}
 			);
 		},
 		
 		function(reason)
 		{
-			console.error('Error: ' + reason.result.error.message);
+			console.error(reason);
 		}
 	);
 }

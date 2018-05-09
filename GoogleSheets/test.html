@@ -45,15 +45,30 @@
 			name = document.getElementById("Name").value;
 			category = document.getElementById("Category").value;
 
+			
 			//placek(value, name, category);
 			//AddNewMonthSheet();
 			//UpdateSheetList(null);
 			//AddSheet();
 			//AddExpense(value, name, category);
-			CreateNewSpreadsheet("nowySpredShit");
+			//CreateNewSpreadsheet("nowySpredShieeeet");
+			//GetSpreadsheetList(SelectSpreadsheet);
 			//AddCategory(value, "outcome");
 			//DeleteCategory(value);
 			//AddSheet(name);
+		}
+		
+		function SelectSpreadsheet()
+		{
+			var splist = LocalSpreadsheetList()
+			
+			console.log(splist);
+			
+			var spreadsheetId = splist[3].id
+			
+			console.log(spreadsheetId);
+			
+			ChooseExistingSpreadsheet(spreadsheetId);
 		}
 		
 	</script>
