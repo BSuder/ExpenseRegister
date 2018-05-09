@@ -46,9 +46,8 @@ var BalancePosition = 8;
 /************************************** ON LOAD *********************************************/
 function OnWebpageLoad()
 {
-	UpdateCategoryLists();
-	UpdateSheetList();
-	UpdateCurrentExpenseList();
+	UpdateCategoryLists(UpdateSheetList);
+	//UpdateCurrentExpenseList();
 }
 
 /************************************ ADD EXPENSE *******************************************/
@@ -112,6 +111,7 @@ function SendExpense(value, name, category, recordIndex)
 		function(response)
 		{
 			console.log(response.result);
+			alert("Expense added: " + value + ", " + name + ", " + category + ".");
 			CheckLimit();
 		}, 
 		  
@@ -153,7 +153,6 @@ function CheckLimit()
 }
 
 /************************************ SHEET MANAGEMENT *******************************************/
-
 function AddNewMonthSheet() 
 {
 	var params = 
@@ -218,6 +217,8 @@ function NameNewTemplate(id, callback)
 		{
 			console.log(response.result);
 			UpdateSheetList();
+			
+			ImportCategoriesToNewSheet();
 		}, 
 		
 		function(reason) 
@@ -249,6 +250,8 @@ function UpdateSheetList()
 				AddNewMonthSheet();
 				return;
 			}
+			
+			UpdateCategoryLists();
 		}, 
 
 		function(response) 
@@ -260,19 +263,46 @@ function UpdateSheetList()
 
 function ImportCategoriesToNewSheet()
 {
+	console.log("Importing categoriees" + OutcomeCategoryList);
 	
-}
-
-function SetNewSheetStartAmount()
-{
-	
+	var coordinates = OutcomeCategoriesPosition;
+	var body = {"range":coordinates, "majorDimension":"ROWS", "values":OutcomeCategoryList};
+		
+	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinates, valueInputOption:'USER_ENTERED'}, body).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+			
+			coordinates = IncomeCategoriesPosition;
+			body = {"range":coordinates, "majorDimension":"ROWS", "values":IncomeCategoryList};
+				
+			gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinates, valueInputOption:'USER_ENTERED'}, body).then
+			(
+				function(response)
+				{
+					console.log(response.result);
+				}, 
+				  
+				function(reason)
+				{
+					console.error('Error: ' + reason.result.error.message);
+				}
+			);
+		}, 
+		  
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
 }
 
 function GenerateSheetName()
 {
 	var date = new Date();
 	//return ((date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + (date.getYear() - 100));
-	return "05.18";
+	return "06.18";
 	
 }
 
