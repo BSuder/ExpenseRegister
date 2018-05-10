@@ -26,27 +26,53 @@ limitations under the License.
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="css/TopButtonsStyle.css">
+	<link rel="stylesheet" href="css/loginPageStyle.css">
 	<script src="js/frontEndHelper.js"></script>
 	
 	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
 	
-<div data-role="page" id="pageone"  >
+<div data-role="page" id="loginPage"  >
+		<div id="container"> 
 
+		<div id= "title" >
+			<h2 class="header">Expense Register</h2>  
+		</div>
+			
+		<div id="gora">
+			<a href="adres"><img src="images_1.png"/>
+			<h3><font color="gray">Sign in with your Google Account</font></h3>
+		</div>
+		<div id="buttons">
+			<a onclick="doLogin()" class="btn btn-sm animated-button victoria-two">Login</a> 
+			<a href="https://accounts.google.com/SignUp?hl=pl" class="btn btn-sm animated-button victoria-three">Register</a> 
+		</div>
+			
+	</div>
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+	</div>
+	
+	<div data-role="page" id="pageone"  >
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()"><b href="#pageone">Main</b></button>
-			<button onclick="getSummary()"><a href="#Summary">Summary</a></button>
-			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
-			<button ><a class="last">Log out</a></button>
+			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
+			<button onclick="getSummary()"><img src="img/summary.png"/></button>
+			<button onclick="printHistory()"><img src="img/history.png"/></button>
+			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
+			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
+		<h2 class="currentFile"><h2>
 	</div>
-
+	
 	<div data-role="main" class="ui-content">
 		<h2 align="center">Enter new expense</h2>
+		<h3 id="mainBalance"></h3>
 		<text>Category:</text> 
 		<select id="Category" name="cat">
 			<!--option value="Undefined"></option-->
@@ -70,21 +96,32 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()"><a href="#pageone">Main</a></button>
-			<button onclick="getSummary()"><b>Summary</b></button>
-			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
-			<button ><a class="last">Log out</a></button>
+			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
+			<button onclick="getSummary()"><img src="img/summary.png"/></button>
+			<button onclick="printHistory()"><img src="img/history.png"/></button>
+			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
+			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
+		<h2 class="currentFile"><h2>
 	</div>
 
 	<div data-role="main" class="ui-content">
 		<h2 align="center">Summary of efforts</h2>
 		
+		<table id="MainSummary" class="greyGridTable">
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Amount</th>
+			</tr>
+		</thead>
+		</table>
+		
 		<script src="https://static.anychart.com/js/8.0.1/anychart-core.min.js"></script>
 		<script src="https://static.anychart.com/js/8.0.1/anychart-pie.min.js"></script>
-		<div id=MasterGraph"> 
+		<div id="MasterGraph"> 
 			<div id="PieGraph"></div>
 		</div>
 		<table id="testTable" class="greyGridTable">
@@ -105,17 +142,18 @@ limitations under the License.
 </div> 
 
 <div data-role="page" id="History">
-
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()"><a href="#pageone">Main</a></button>
-			<button onclick="getSummary()"><a href = "#Summary">Summary</a></button>
-			<button onclick="printHistory()" ><b href="#History">History</b></button>
-			<button onclick="manageCategories()"><a href="#Settings">Settings</a></button>
-			<button ><a class="last">Log out</a></button>
+			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
+			<button onclick="getSummary()"><img src="img/summary.png"/></button>
+			<button onclick="printHistory()"><img src="img/history.png"/></button>
+			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
+			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
+		<h2 class="currentFile"><h2>
 	</div>
 	
 	<div data-role="main" class="ui-content">
@@ -141,17 +179,18 @@ limitations under the License.
 </div> 
 
 <div data-role="page" id="Settings">
-
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()"><a href="#pageone">Main</a></button>
-			<button onclick="getSummary()"><a href = "#Summary">Summary</a></button>
-			<button onclick="printHistory()" ><a href="#History">History</a></button>
-			<button onclick="manageCategories()"><b href="#Settings">Settings</b></button>
-			<button ><a class="last">Log out</a></button>
+			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
+			<button onclick="getSummary()"><img src="img/summary.png"/></button>
+			<button onclick="printHistory()"><img src="img/history.png"/></button>
+			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
+			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
+		<h2 class="currentFile"><h2>
 	</div>
 	
 	<div data-role="main" class="ui-content">
@@ -178,6 +217,46 @@ limitations under the License.
 		<h4 align="center">Alarm of high efforts</h4>
 		<input id="EffortsAlarn"></input>
 		<button id="saveAlarm" onclick="SaveNewAlarmLevel()">Save</button>
+		
+	</div>
+
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="FilesManagement">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
+			<button onclick="getSummary()"><img src="img/summary.png"/></button>
+			<button onclick="printHistory()"><img src="img/history.png"/></button>
+			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
+			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+	
+		<h2 align="center">Files management</h2>
+
+		<div>
+		<table id="FilesList" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>File Name</th>
+			<th></th>
+			<th></th>
+			</tr>
+			</thead>
+		</table>
+		</div>
 		
 	</div>
 
