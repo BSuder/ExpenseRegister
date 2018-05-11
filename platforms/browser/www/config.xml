@@ -1,13 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="myfirstapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="pl.patryk.expenseRegister" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Device">
         <param name="browser-package" value="Device" />
     </feature>
-    <name>First app</name>
+    <name>Expense Register</name>
     <description>My first mobile app</description>
     <author email="zonb93@gmail.com" href="http://mypersonalwebsite.com">
-		Adam Włodarczyk
-		Bartosz Suder
-		Patryk Rębilas
-	</author>
+        Adam Włodarczyk
+        Bartosz Suder
+        Patryk Rębilas
+    </author>
+    <variable name="323290425508-dkhisu6b0pfqe45e6s7u5bjjpk146ghq" value="ZfqRRdj0kVoD6t9iloHVNVgO" />
 </widget>
