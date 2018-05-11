@@ -1,8 +1,8 @@
 var IncomeCats =["wypłata", "stypendium", "bagiety"];
 var OutcomeCats = ["czesne", "mieszkanie", "media", "meh"];
-var History = [["data1","kategoria1", "nazwa", 123], ["data2","kategoria2", "nazwa2", 456], ["data3","kategoria3", "nazwa3", 789]];
-var IncomeSummary = [["in1", 123], ["in2",345], ["in3",543]];
-var OutcomeSummary = [["out1", 12], ["out2",3], ["ou3",324]];
+//var History = [["data1","kategoria1", "nazwa", 123], ["data2","kategoria2", "nazwa2", 456], ["data3","kategoria3", "nazwa3", 789]];
+//var IncomeSummary = [["in1", 123], ["in2",345], ["in3",543]];
+//var OutcomeSummary = [["out1", 12], ["out2",3], ["ou3",324]];
 var FilesList = [["file1", 12325],["file2","23rre"],["file3","123ff34f"],["file4",13454]];
 var ActualSheetId = "34tgrdb";
 var Balance = -1230.01;
@@ -10,7 +10,7 @@ var Outcome = 123;
 var Income = 123.423;
 
 var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1},{"category":"3 linia", "type":1}];
-var Wydatki = JSON.parse('');
+//var Wydatki = JSON.parseText('');
 
 var json = {
 	"chart": {
@@ -25,6 +25,21 @@ var chart;
 		alert("logout button clicked");
 	}
 
+	function genAll(){
+		generateBasicDropDown();
+		generateBasicPie();
+		generateMonths();
+		defCurrentFile();
+		setMainBalance();
+		UpdateSummary(CurrentSheetName,UpSummary);
+		UpdateExpenseList(CurrentSheetName,printHistory);
+	}
+	
+	function UpSummary(){
+		getSummary();
+		basicSummary();
+	}
+	
 	function repleaceComma(input){
 		var tmpStr = input.replace(',','.');
 		return tmpStr;
@@ -50,17 +65,16 @@ var chart;
 		var kategoria = document.getElementById("Category").value;
 		// zamiana przecinka na kropke
 		tmp = toNumber(tmp);
-		if(tmp != false) sendData(tmp, nazwa, kategoria);
+		if(tmp != false) AddExpense(tmp, nazwa, kategoria);
 		// to do wysłanie danych
 		
 	}
-  
-	function sendData(wydatek, nazwa, kategoria){
-		alert("wartosc wydatku: " + wydatek + ", nazwa: " + nazwa + ", kategoria: " + kategoria);
-	}
-  
+
 	function generateDropDown(){
-		// to do: funckcja pobierania z GS ilości kategorii
+		console.log("Front function : generate all");
+		// get income and outcoe cats
+		OutcomeCats = GetLocalOutcomeCategories();
+		IncomeCats = GetLocalIncomeCategories();
 		
 		// delete current categories
 		$("#Category").children().remove();
@@ -71,7 +85,6 @@ var chart;
 		for(var iter=0; iter<OutcomeCats.length; iter++){
 			$('<option id="' + OutcomeCats[iter] + '" value="' + OutcomeCats[iter] + '">' + OutcomeCats[iter] + '</option>').appendTo('#Category');
 		}
-		
 		// redirect to page which add new effort
 		window.location = "#pageone";
 
@@ -80,21 +93,43 @@ var chart;
     function generateBasicDropDown(){
 		// to do: funckcja pobierania z GS ilości kategorii
 		$("#Category").children().remove();
-		
+		console.log("Dredowe Front function : generate all");
+		OutcomeCats = GetLocalOutcomeCategories();
+		IncomeCats = GetLocalIncomeCategories();
 		for(var iter=0; iter<IncomeCats.length; iter++){
 				$('<option id="' + IncomeCats[iter] + '" value="' + IncomeCats[iter] + '">' + IncomeCats[iter] + '</option>').appendTo('#Category');
 		}
 		for(var iter=0; iter<OutcomeCats.length; iter++){
 			$('<option id="' + OutcomeCats[iter] + '" value="' + OutcomeCats[iter] + '">' + OutcomeCats[iter] + '</option>').appendTo('#Category');
 		}
-		
-		generateBasicPie();
+
+	}
+	
+	function generateMonths(){
+		// to do: funckcja pobierania z GS ilości kategorii
+		$("#MonthsSummary").children().remove();
+		var tmp = GetLocalMonthList();
+		console.log("Front function : generate months");
+		for(var iter=0; iter<tmp.length; iter++){
+				$('<option value="'+tmp[iter]+'" onclick=getSelectedMonth()>' + tmp[iter] + '</option>').appendTo('#MonthsSummary');
+		}
 		defCurrentFile();
 		setMainBalance();
 	}
+	
+	function getSelectedMonth(){
+		console.log("wybrano jakis miesiac");
+		var tmp = document.getElementById("MonthsSummary").value
+		UpdateSummary(tmp,genAll);
+	}
+  
   
     function getSummary(){
 	  
+		Income = GetLocalSummaryIncome();
+		Outcome = GetLocalSummaryOutcome();
+		Balance = GetLocalSummaryBalance();
+		
 		printPie();
 		
 		var table = document.getElementById("testTable");
@@ -132,19 +167,6 @@ var chart;
 		
 		// set balance 
 		table.deleteTFoot();
-		// Create an empty <tfoot> element and add it to the table:
-		var footer = table.createTFoot();
-
-		// Create an empty <tr> element and add it to the first position of <tfoot>:
-		var row = footer.insertRow(0);      
-
-		// Insert a new cell (<td>) at the first position of the "new" <tr> element:
-		var cell1 = row.insertCell(0);
-		var cell2 = row.insertCell(1);
-		var test = new Date().getTime().toString();
-		// Add some bold text in the new cell:
-		cell1.innerHTML = "<b>Balance</b>";
-		cell2.innerHTML = "<b>" +Balance+  "</b>";	
 			
 		basicSummary();
 		// redirect to page which add new effort
@@ -198,6 +220,14 @@ var chart;
   } 
 
 	function printHistory(){
+		
+		
+		$("#MonthsSummaryHistory").children().remove();
+		var tmp = GetLocalMonthList();
+		console.log("Front function : generate months");
+		for(var iter=0; iter<tmp.length; iter++){
+				$('<option value="'+tmp[iter]+'" onclick=getSelectedMonth()>' + tmp[iter] + '</option>').appendTo('#MonthsSummaryHistory');
+		}
 
 		var table = document.getElementById("historyTable");
 
@@ -209,7 +239,7 @@ var chart;
 		}
 			
 		// print new inside rows
-		for (var iter=0; iter<History.length; iter++) {
+		for (var iter=0; iter<ExpenseList.length; iter++) {
 			// Create an empty <tr> element and add it to the 1st position of the table:
 			var row = table.insertRow(1);
 			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
@@ -218,15 +248,26 @@ var chart;
 			var Amount = row.insertCell(2);
 			var Dejt = row.insertCell(3);
 			// Add some text to the new cells:
-			CatName.innerHTML = History[iter][1];
-			Title.innerHTML = History[iter][2];
-			Amount.innerHTML = History[iter][3];
-			Dejt.innerHTML = History[iter][0];
+			CatName.innerHTML = ExpenseList[iter][3];
+			Title.innerHTML = ExpenseList[iter][2];
+			Amount.innerHTML = ExpenseList[iter][1];
+			Dejt.innerHTML = ExpenseList[iter][0];
 		}
 		
+		//generateMonthsHist();
 		// redirect to page which add new effort
 		window.location = "#History";
 	
+	}
+	
+	function getSelectedMonthHistory(){
+		console.log("wybrano jakis miesiac");
+		var tmp = document.getElementById("MonthsSummaryHistory").value
+		UpdateExpenseList(tmp,printHistory);
+	}
+	
+	function generateMonthsHist(){
+
 	}
   
 	function sendBalance(){
