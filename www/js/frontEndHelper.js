@@ -26,37 +26,23 @@ var chart;
 	}
 
 	function genAllMain(){
-		generateBasicDropDown();
-		generateBasicPie();
-		generateMonths();
-		defCurrentFile();
-		setMainBalance();
-		UpdateSummary(CurrentSheetName,UpSummary);
-		UpdateExpenseList(CurrentSheetName,printHistory);
-		// redirect to page which add new effort
-		window.location = "#pageone";
+		generateDropDown();
 	}
 	
-		function genAllSummary(){
-		generateBasicDropDown();
-		generateBasicPie();
-		generateMonths();
-		defCurrentFile();
-		setMainBalance();
+	function genAllSummary(){
 		UpdateSummary(CurrentSheetName,UpSummary);
-		UpdateExpenseList(CurrentSheetName,printHistory);
-		// redirect to page which add new effort
-		window.location = "#Summary";
 	}
 	
-		function genAllHistory(){
-		generateBasicDropDown();
-		generateBasicPie();
-		generateMonths();
-		defCurrentFile();
-		setMainBalance();
-		UpdateSummary(CurrentSheetName,UpSummary);
+	function genAllHistory(){
 		UpdateExpenseList(CurrentSheetName,printHistory);
+	}
+	
+	function genAllSettings(){
+		UpdateSummary(CurrentSheetName,manageCategories);
+	}
+	
+	function genAllManage(){
+		refreshSpreadsheetList();
 	}
 	
 	function UpSummary(){
@@ -245,7 +231,6 @@ var chart;
 
 	function printHistory(){
 		
-		
 		$("#MonthsSummaryHistory").children().remove();
 		var tmp = GetLocalMonthList();
 		console.log("Front function : generate months");
@@ -277,8 +262,7 @@ var chart;
 			Amount.innerHTML = ExpenseList[iter][1];
 			Dejt.innerHTML = ExpenseList[iter][0];
 		}
-		
-		//generateMonthsHist();
+
 		// redirect to page which add new effort
 		window.location = "#History";
 	
@@ -289,11 +273,7 @@ var chart;
 		var tmp = document.getElementById("MonthsSummaryHistory").value
 		UpdateExpenseList(tmp,printHistory);
 	}
-	
-	function generateMonthsHist(){
 
-	}
-  
 	function sendBalance(){
 		//	pobranie z frontu danych
 		var tmp = document.getElementById("balance").value;
@@ -372,7 +352,7 @@ var chart;
 	function delCategory(type){
 		DeleteCategory(type,manageCategories);
 	}
-
+	
 	function SaveNewCategory(){
 		var CategotyName = document.getElementById("newCategoryName").value;
 		var CategoryType = document.getElementById("newCategoryType").value;

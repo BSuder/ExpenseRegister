@@ -30,7 +30,7 @@ var OutcomeCategoryList = {};
 
 var MaxCategoryIndex = 21;
 
-
+var NewCreatedSpreadsheetName = "";
 
 var ExpenseListPosition = "A2:D500";
 var ExpenseList = {};
@@ -440,6 +440,10 @@ function CreateNewSpreadsheet(name, callback) {
 		{
 			console.log(response.result);
 			SpreadsheetId = response.result.spreadsheetId;
+			NewCreatedSpreadsheetName = response.result.properties.title;
+			
+			console.log("New spreadsheet name: " + NewCreatedSpreadsheetName);
+			
 			NewSpreadsheet = 1;
 			AddNewMonthSheet(callback);
 		}, 
@@ -490,6 +494,8 @@ function DeleteDefaultSheet(callback)
 
 function GetSpreadsheetList(callback)
 {
+	var currentSpreadsheetFound = 0;
+	
 	console.log("Updating spreadsheet list...");
 	
 	gapi.client.drive.files.list({'pageSize': 100, 'fields': "nextPageToken, files(id, name)", 'q' : "fullText contains '" + TemplateCheckString + "'"}).then
@@ -499,6 +505,19 @@ function GetSpreadsheetList(callback)
 			console.log(response.result.files);
 			
 			SpreadsheetList = response.result.files;
+			
+			for(i = 0; i < SpreadsheetList.length; i++)
+			{
+				if(SpreadsheetList[i].id == SpreadsheetId)
+				{
+					currentSpreadsheetFound = 1;
+				}
+			}
+			
+			if(!currentSpreadsheetFound)
+			{
+				SpreadsheetList.push({"id" : SpreadsheetId, "name" : NewCreatedSpreadsheetName});
+			}
 			
 			if(callback != null)
 			{
