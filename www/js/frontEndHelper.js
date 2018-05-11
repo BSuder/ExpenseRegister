@@ -3,7 +3,7 @@ var OutcomeCats = ["czesne", "mieszkanie", "media", "meh"];
 //var History = [["data1","kategoria1", "nazwa", 123], ["data2","kategoria2", "nazwa2", 456], ["data3","kategoria3", "nazwa3", 789]];
 //var IncomeSummary = [["in1", 123], ["in2",345], ["in3",543]];
 //var OutcomeSummary = [["out1", 12], ["out2",3], ["ou3",324]];
-var FilesList = [["file1", 12325],["file2","23rre"],["file3","123ff34f"],["file4",13454]];
+//var FilesList = [["file1", 12325],["file2","23rre"],["file3","123ff34f"],["file4",13454]];
 var ActualSheetId = "34tgrdb";
 var Balance = -1230.01;
 var Outcome = 123;
@@ -25,7 +25,31 @@ var chart;
 		alert("logout button clicked");
 	}
 
-	function genAll(){
+	function genAllMain(){
+		generateBasicDropDown();
+		generateBasicPie();
+		generateMonths();
+		defCurrentFile();
+		setMainBalance();
+		UpdateSummary(CurrentSheetName,UpSummary);
+		UpdateExpenseList(CurrentSheetName,printHistory);
+		// redirect to page which add new effort
+		window.location = "#pageone";
+	}
+	
+		function genAllSummary(){
+		generateBasicDropDown();
+		generateBasicPie();
+		generateMonths();
+		defCurrentFile();
+		setMainBalance();
+		UpdateSummary(CurrentSheetName,UpSummary);
+		UpdateExpenseList(CurrentSheetName,printHistory);
+		// redirect to page which add new effort
+		window.location = "#Summary";
+	}
+	
+		function genAllHistory(){
 		generateBasicDropDown();
 		generateBasicPie();
 		generateMonths();
@@ -281,9 +305,8 @@ var chart;
 			alert("Error, value in Amount of effort must be a number");
 		}
 		else{
-			alert("nowy balans: " + wydatek );
+			SetExpenseLimit(wydatek);
 		}
-		// to do wysłanie danych
 	}
   
 	function manageCategories(){
@@ -297,7 +320,7 @@ var chart;
 		}
 		
 		// dodanie ostatniej linijki
-		var helperChioce ="<select id=\"newCategoryType\"><option value=\"Income\">Income</option><option value=\"Effort\">Effort</option></select>";
+		var helperChioce ="<select id=\"newCategoryType\"><option value=\"Outcome\">Outcome</option><option value=\"Income\">Income</option></select>";
 		var helperButton = "<button onclick=SaveNewCategory()><img src=\"img/save.png\" /></button>";
 		
 		var newRow = table.insertRow(1);
@@ -310,10 +333,10 @@ var chart;
 		CatType.innerHTML = helperChioce;
 		Bttn.innerHTML = helperButton;
 		
-		var tmpAllCats = IncomeCats;
-			tmpAllCats = tmpAllCats  + OutcomeCats;
+		var tmpAllCats = IncomeCategoryList;
+			tmpAllCats = tmpAllCats  + OutcomeCategoryList;
 		// print all income categories rows
-		for(var i=0; i<IncomeCats.length; i++){
+		for(var i=0; i<IncomeCategoryList.length; i++){
 			// Create an empty <tr> element and add it to the 1st position of the table:
 			var CatRow = table.insertRow(1);
 			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
@@ -321,13 +344,13 @@ var chart;
 			var CatType = CatRow.insertCell(1);
 			var Bttn = CatRow.insertCell(2);
 			// Add some text to the new cells:
-			Name.innerHTML = IncomeCats[i];
+			Name.innerHTML = IncomeCategoryList[i];
 			CatType.innerHTML = "Income";
-			Bttn.innerHTML = "<button onclick=deleteCategory(1,"+i+")><img src=\"img/del.png\" /></button>";
+			Bttn.innerHTML = "<button onclick=DeleteCategory("+IncomeCategoryList[i]+")><img src=\"img/del.png\" /></button>";
 
 		}
 		// print all outcome categories rows
-		for(var a=0; a<OutcomeCats.length; a++){
+		for(var a=0; a<OutcomeCategoryList.length; a++){
 			// Create an empty <tr> element and add it to the 1st position of the table:
 			var CatRow = table.insertRow(1);
 			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
@@ -335,9 +358,9 @@ var chart;
 			var CatType = CatRow.insertCell(1);
 			var Bttn = CatRow.insertCell(2);
 			// Add some text to the new cells:
-			Name.innerHTML = OutcomeCats[a];
+			Name.innerHTML = OutcomeCategoryList[a];
 			CatType.innerHTML = "Outcome";
-			Bttn.innerHTML = "<button onclick=deleteCategory(-1,"+a+")><img src=\"img/del.png\" /></button>";
+			Bttn.innerHTML = "<button onclick=delCategory(\""+OutcomeCategoryList[a]+"\")><img src=\"img/del.png\" /></button>";
 
 		}
 		
@@ -346,40 +369,18 @@ var chart;
 		
 	}
 	
-	function deleteCategory(type, btn){
-		if(type == 1){
-			// usuniecie kategorii z dochodow
-			IncomeCats.splice(btn, 1);
-			// przeładowanie obecnych kategroii
-			manageCategories();
-		}
-		else if(type == -1){
-			// usuniecie kategorii z wydatkow 
-			OutcomeCats.splice(btn, 1);
-			// przeładowanie obecnych kategroii
-			manageCategories();
-		}
-		else{
-			alert("Unknown category type");
-		}
+	function delCategory(type){
+		DeleteCategory(type,manageCategories);
 	}
 
 	function SaveNewCategory(){
 		var CategotyName = document.getElementById("newCategoryName").value;
 		var CategoryType = document.getElementById("newCategoryType").value;
 		
-		if(CategoryType == "Income"){IncomeCats.push(CategotyName);}
-		else if(CategoryType == "Effort"){OutcomeCats.push(CategotyName);}
+		if(CategoryType == "Income"){AddCategory(CategotyName,"income",manageCategories);}
+		else if(CategoryType == "Outcome"){AddCategory(CategotyName,"outcome",manageCategories);}
 		else{alert("Unknown category type");}
 
-		manageCategories();
-	}
-	
-	function SaveNewAlarmLevel(){
-		var AlarmLevel = document.getElementById("EffortsAlarn").value;
-		
-		AlarmLevel =toNumber(AlarmLevel);
-		if(AlarmLevel!=false) alert("nowy poziom alarmu: " + AlarmLevel );
 	}
 
 	function generateBasicPie() {
@@ -439,7 +440,13 @@ var chart;
 		$("#PieGraph").children().remove();
 	}
 	
+	function refreshSpreadsheetList(){
+		GetSpreadsheetList(generateFileslist);
+	}
+	
 	function generateFileslist(){
+		console.log("lista shitow");
+		console.log(SpreadsheetList);
 		
 		var table = document.getElementById("FilesList");
 		var tableCnt = $('#FilesList tr').length;
@@ -461,14 +468,14 @@ var chart;
 		Bttn.innerHTML = helperButton;
 		
 		// print all vailable files
-		for(var i=0; i<FilesList.length; i++){
+		for(var i=0; i<SpreadsheetList.length; i++){
 			// Create an empty <tr> element and add it to the 1st position of the table:
 			var CatRow = table.insertRow(1);
 			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
 			var Name = CatRow.insertCell(0);
 			var Bttn = CatRow.insertCell();
 			// Add some text to the new cells:
-			Name.innerHTML = FilesList[i][0];
+			Name.innerHTML = SpreadsheetList[i].name;
 			Bttn.innerHTML = "<button onclick=GotoSheet("+i+")><img src=\"img/arrowR.png\" /></button>";
 
 		}
@@ -479,18 +486,15 @@ var chart;
 	}
 	
 	function NewFile(){
-		var newFile = document.getElementById("newFileName").value;
-		var tmp = [newFile, "234rf"];
-		alert("nowy lik rob, nazwa nowego pliku: " + newFile);
-		
-		FilesList.push(tmp);
-		generateFileslist();
-		alert("lista plikow" + FilesList);
+		var newSpreadName = document.getElementById("newFileName").value;
+		CreateNewSpreadsheet(newSpreadName,refreshSpreadsheetList);
 	}
 	
 	function GotoSheet(btn){
-		alert("wcisnieto przywcisk: " + btn + "przejscie do shitu");
-		ActualSheetId = FilesList[btn][0];
+		ActualSheetId = SpreadsheetList[btn].id;
+		console.log("wybrany spread shit");
+		console.log(ActualSheetId);
+		ChooseExistingSpreadsheet(ActualSheetId);
 	}
 	
 	function defCurrentFile(){

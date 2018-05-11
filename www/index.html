@@ -7,7 +7,7 @@
 		
 	</head>
 	
-	<body onload="genAll();"> 
+	<body onload="genAllMain()"> 
 	
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
 		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -54,11 +54,11 @@
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="genAll()" ><img src="img/main.png"/></button>
-			<button onclick="genAll()"><img src="img/summary.png"/></button>
-			<button onclick="genAll()"><img src="img/history.png"/></button>
-			<button onclick="genAll()"><img src="img/settings.png"/></button>
-			<button onclick="genAll()"><img src="img/manage.png"/></button>
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllMain()"><img src="img/history.png"/></button>
+			<button onclick="genAllMain()"><img src="img/settings.png"/></button>
+			<button onclick="genAllMain()"><img src="img/manage.png"/></button>
 			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
@@ -95,7 +95,7 @@
 			<button onclick="getSummary()"><img src="img/summary.png"/></button>
 			<button onclick="printHistory()"><img src="img/history.png"/></button>
 			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="refreshSpreadsheetList()"><img src="img/manage.png"/></button>
 			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
@@ -147,7 +147,7 @@
 			<button onclick="getSummary()"><img src="img/summary.png"/></button>
 			<button onclick="printHistory()"><img src="img/history.png"/></button>
 			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="refreshSpreadsheetList()"><img src="img/manage.png"/></button>
 			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
@@ -187,7 +187,7 @@
 			<button onclick="getSummary()"><img src="img/summary.png"/></button>
 			<button onclick="printHistory()"><img src="img/history.png"/></button>
 			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="refreshSpreadsheetList()"><img src="img/manage.png"/></button>
 			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
@@ -211,14 +211,9 @@
 		</table>
 		</div>
 	
-		<h4 align="center">Monthly balance</h4>
+		<h4 align="center">Expense limit</h4>
 		<input id="balance"></input>
 		<button id="saveBalance" onclick="sendBalance()">Save</button>
-		
-		<h4 align="center">Alarm of high efforts</h4>
-		<input id="EffortsAlarn"></input>
-		<button id="saveAlarm" onclick="SaveNewAlarmLevel()">Save</button>
-		
 	</div>
 
 	<div data-role="footer">
@@ -236,7 +231,7 @@
 			<button onclick="getSummary()"><img src="img/summary.png"/></button>
 			<button onclick="printHistory()"><img src="img/history.png"/></button>
 			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
+			<button onclick="refreshSpreadsheetList()"><img src="img/manage.png"/></button>
 			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>

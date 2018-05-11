@@ -115,6 +115,7 @@ function GetLocalMonthList()
 	
 	var list = [];
 
+
 	for(i = 0; i < SheetList.length; i++)
 	{
 		list.push(SheetList[i].properties.title);
@@ -266,7 +267,7 @@ function SetExpenseLimit(value)
 
 
 /************************************ SHEET MANAGEMENT *******************************************/
-function AddNewMonthSheet() 
+function AddNewMonthSheet(callback) 
 {
 	var params = 
 	{
@@ -285,7 +286,7 @@ function AddNewMonthSheet()
 		{
 			console.log(response.result.sheetId);
 			
-			NameNewTemplate(response.result.sheetId);
+			NameNewTemplate(response.result.sheetId, callback);
 		}, 
 		
 		function(reason) 
@@ -338,7 +339,7 @@ function NameNewTemplate(id, callback)
 			else
 			{
 				SaveSpreadsheetToFirebase();
-				DeleteDefaultSheet();
+				DeleteDefaultSheet(callback);
 			}
 		}, 
 		
@@ -349,7 +350,7 @@ function NameNewTemplate(id, callback)
 	);	
 }
 
-function UpdateSheetList()
+function UpdateSheetList(callback)
 {
 	gapi.client.sheets.spreadsheets.get({spreadsheetId: SpreadsheetId}).then
 	(
@@ -373,7 +374,7 @@ function UpdateSheetList()
 				return;
 			}
 			
-			UpdateCategoryLists();
+			UpdateCategoryLists(callback);
 		}, 
 
 		function(response) 
@@ -431,7 +432,7 @@ function GenerateSheetName()
 /********************************* SPREADSHEET MANAGEMENT ****************************************/
 
 
-function CreateNewSpreadsheet(name) {
+function CreateNewSpreadsheet(name, callback) {
 	
 	gapi.client.sheets.spreadsheets.create({},{"properties": {"title": name}}).then
 	(
@@ -440,7 +441,7 @@ function CreateNewSpreadsheet(name) {
 			console.log(response.result);
 			SpreadsheetId = response.result.spreadsheetId;
 			NewSpreadsheet = 1;
-			AddNewMonthSheet();
+			AddNewMonthSheet(callback);
 		}, 
 		
 		function(reason)
@@ -455,7 +456,7 @@ function SaveSpreadsheetToFirebase()
 	console.log("SAVE TO FIREBASE");
 }
 
-function DeleteDefaultSheet()
+function DeleteDefaultSheet(callback)
 {
 	var params = 
 	{
@@ -477,7 +478,7 @@ function DeleteDefaultSheet()
 		function(response)
 		{
 			console.log(response.result);
-			UpdateSheetList();
+			UpdateSheetList(callback);
 		}, 
 		
 		function(reason) 
@@ -489,7 +490,9 @@ function DeleteDefaultSheet()
 
 function GetSpreadsheetList(callback)
 {
-	gapi.client.drive.files.list({'pageSize': 20, 'fields': "nextPageToken, files(id, name)", 'q' : "fullText contains '" + TemplateCheckString + "'"}).then
+	console.log("Updating spreadsheet list...");
+	
+	gapi.client.drive.files.list({'pageSize': 100, 'fields': "nextPageToken, files(id, name)", 'q' : "fullText contains '" + TemplateCheckString + "'"}).then
 	(
 		function(response)
 		{
@@ -507,6 +510,9 @@ function GetSpreadsheetList(callback)
 
 function ChooseExistingSpreadsheet(spreadsheetId)
 {
+	console.log("ChooseExistingSpreadsheet");
+	console.log(spreadsheetId);
+	
 	SpreadsheetId = spreadsheetId;
 	UpdateCategoryLists(UpdateSheetList);
 	SaveSpreadsheetToFirebase();
@@ -514,7 +520,7 @@ function ChooseExistingSpreadsheet(spreadsheetId)
 
 /*************************************** CATEGORIES *********************************************/
 
-function AddCategory(categoryName, categoryType)
+function AddCategory(categoryName, categoryType, callback)
 {	
 	var coordinates;
 	var categoryIndex
@@ -556,7 +562,7 @@ function AddCategory(categoryName, categoryType)
 			
 			coordinates = (categoryType == "income" ? IncomeCategoryColumn : OutcomeCategoryColumn) + categoryIndex;
 			
-		    UpdateSingleCategory(coordinates, categoryName);
+		    UpdateSingleCategory(coordinates, categoryName, callback);
 		},
 		
 		function(reason)
@@ -566,10 +572,12 @@ function AddCategory(categoryName, categoryType)
 	);
 }
 
-function DeleteCategory(categoryName)
+function DeleteCategory(categoryName, callback)
 {
 	var coordinates;
 	indexFound = -1;
+	
+	console.log(categoryName);
 	
 	for(i = 0; i < IncomeCategoryList.length; i++)
 	{
@@ -603,7 +611,7 @@ function DeleteCategory(categoryName)
 		return;
 	}
 	
-	UpdateSingleCategory(coordinates, "");
+	UpdateSingleCategory(coordinates, "", callback);
 }
 
 function UpdateCategoryLists(callback)
@@ -646,7 +654,7 @@ function UpdateCategoryLists(callback)
 	);
 }
 
-function UpdateSingleCategory(coordinate, value)
+function UpdateSingleCategory(coordinate, value, callback)
 {
 	var body = {"range":coordinate, "majorDimension":"ROWS", "values":[[value]]};
 		
@@ -656,7 +664,7 @@ function UpdateSingleCategory(coordinate, value)
 		{
 			console.log(response.result);
 			
-			UpdateCategoryLists();
+			UpdateCategoryLists(callback);
 		}, 
 		  
 		function(reason)
