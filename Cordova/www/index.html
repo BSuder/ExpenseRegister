@@ -1,50 +1,282 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8"/>
-  <meta name="format-detection" content="telephone=no"/>
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"/>
-  <link rel="stylesheet" type="text/css" href="css/index.css"/>
-  <meta name="msapplication-tap-highlight" content="no"/>
-  <meta name="google-signin-client_id" content="25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com">
-  <title>Hello World</title>
-</head>
-<body>
+    <head>
+
+		<meta name="format-detection" content="telephone=no"/>
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"/>
+		<meta name="msapplication-tap-highlight" content="no"/>
+		<meta name="google-signin-client_id" content="25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com">
+		<meta charset='utf-8' />
+		
+		<title>Google Sheets API Quickstart</title>
+
+	</head>
+	
+	<body onload="genAllMain()"> 
+	
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+		
+			<!--body onload="generateBasicDropDown()"-->
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="css/TopButtonsStyle.css">
+		<link rel="stylesheet" href="css/loginPageStyle.css">
+		<script src="js/frontEndHelper.js"></script>
+	
+		<script type="text/javascript" src="cordova.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<script src="js/firebase-3.6.4.js"></script>
+		<script src="js/backend.js"></script>
+			
+	
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+
 <div class="app">
-  <img id="image" style="position:absolute; top:10px; left:10px" src="" />
-
-  <h1>Google+ and Firebase</h1>
-
-  <div id="deviceready">
-    <p class="event listening">Connecting to Device</p>
-    <p class="event received">Device is Ready</p>
-
-    <p id="feedback">Meh...</p>
-    <div id="show_data">Co za gunwo.</div>
-    <button onclick="OnWebpageLoad()">LOAD</button>
-    <button onclick="testFoo()">ADD</button>
-    <button onclick="GetSpreadsheetList()">del</button>
-    <br/><br/>
-    <button onclick="login()">Login with Google+</button>
-    <br/><br/>
-    <button onclick="trySilentLogin()">Try silent login with Google+</button>
-    <br/><br/>
-    <button onclick="logout()">Logout</button>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <button onclick="disconnect()">Disconnect</button>
-    <br/><br/>
-    <button onclick="window.plugins.googleplus.getSigningCertificateFingerprint(function(res){alert(res)}, function(res){alert(res)})">get cert fingerprint (Android)</button>
-  </div>
 </div>
+	
+<div data-role="page" id="loginPage"  >
+		<div id="container"> 
 
-<script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
-<script src="js/firebase-3.6.4.js"></script>
+		<div id= "title" >
+			<h2 class="header">Expense Register</h2>  
+		</div>
+			
+		<div id="buttons">
+			<a onclick="Login()" class="btn btn-sm animated-button victoria-two">Login</a> 
+			<a onclick="Logout()" class="btn btn-sm animated-button victoria-two">Logout</a> 	
+			<a href="https://accounts.google.com/SignUp?hl=pl" class="btn btn-sm animated-button victoria-three">Register</a> 
+		</div>
+			
+	</div>
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+	</div>
+	
+	<div data-role="page" id="pageone"  >
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+		<h2 align="center">Enter new expense</h2>
+		<h3 id="mainBalance"></h3>
+		<text>Category:</text> 
+		<select id="Category" name="cat">
+			<!--option value="Undefined"></option-->
+		</select>
+		<div><i class="fas fa-camera-retro"></i></div>
+		<text>Expense title:</text>
+			<input id="Title">
+		<text>Amount of effort</text>
+			<input id="Amount">
+		<button id="submit" onclick="getNewEffort()">Submit</button>
+	</div>
+  
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="Summary">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+
+	<div data-role="main" class="ui-content">
+		<h2 align="center">Summary of efforts</h2>
+		<div>
+		<select id="MonthsSummary" name="summ"></select>
+		<button onclick="getSelectedMonth()">Go</button>
+		</div>
+		<table id="MainSummary" class="greyGridTable">
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Amount</th>
+			</tr>
+		</thead>
+		</table>
+		
+		<script src="https://static.anychart.com/js/8.0.1/anychart-core.min.js"></script>
+		<script src="https://static.anychart.com/js/8.0.1/anychart-pie.min.js"></script>
+		<div id="MasterGraph"> 
+			<div id="PieGraph"></div>
+		</div>
+		<table id="testTable" class="greyGridTable">
+			<thead>
+				<tr>
+					<th>Category</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+  
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="History">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+	
+		<select id="MonthsSummaryHistory" name="summ"></select>
+		<button onclick="getSelectedMonthHistory()">Go</button>
+		<h2 align="center">History</h2>
+	
+		<table id="historyTable" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>Category</th>
+			<th>Name</th>
+			<th>Value</th>
+			<th>Date</th>
+			</tr>
+			</thead>
+		</table>
+	</div>
+
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="Settings">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+		<h2 align="center">Settings </h2>
+		
+		<h3 align="center">Category management</h3>
+
+		<div>
+		<table id="Categories" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>Category</th>
+			<th>Type</th>
+			<th></th>
+			</tr>
+			</thead>
+		</table>
+		</div>
+	
+		<h4 align="center">Expense limit</h4>
+		<input id="balance"></input>
+		<button id="saveBalance" onclick="sendBalance()">Save</button>
+	</div>
+
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="FilesManagement">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+	
+		<h2 align="center">Files management</h2>
+
+		<div>
+		<table id="FilesList" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>File Name</th>
+			<th></th>
+			<th></th>
+			</tr>
+			</thead>
+		</table>
+		</div>
+		
+	</div>
+
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+
 
 <script>
-
-
-
 
 /*************************************************  AUTHORIZATION  ***********************************************/
 var CLIENT_ID = '25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com'; // Client ID and API key from the Developer Console
@@ -96,6 +328,8 @@ function cordovaLoginHandler(obj)
 
 	console.log("GAPI initialized.");
 	
+	UpdateCategoryLists(UpdateSheetList(generateDropDown));
+	
     if(!firebase.auth().currentUser)
     {
         firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(obj.idToken)).then
@@ -121,7 +355,7 @@ function cordovaLoginHandler(obj)
     }
 }
 
-function login()
+function Login()
 {
 	console.log("Login() called.");
 
@@ -153,7 +387,7 @@ function trySilentLogin()
 	);
 }
 
-function logout()
+function Logout()
 {
 	console.log("Logout() called.");
 
@@ -191,572 +425,24 @@ function initClient() // Initializes the API client library and sets up sign-in 
 {
 	console.log("initClient called");
 
-	gapi.client.load("sheets", "v4",function(response) {console.log("sheets client loaded");});
+	gapi.client.load("sheets", "v4",function(response) {console.log("sheets client loaded"); trySilentLogin();});
 	gapi.client.load('drive', 'v3', function(response) {console.log("drive client loaded");});
-	
-	trySilentLogin();
 }
 
 /*****************************************************************************************************************/
-
-
-
-
-
-function dummy()
-{
-	console.log("dummy()");
-}
-
-
-
-
-
-function disconnect()
-{
-	window.plugins.googleplus.disconnect
-	(
-		function(msg)
-		{
-			console.log("disconnect: ");
-			console.log(msg);
-
-			if(firebase.auth().currentUser)
-			{
-
-				console.log("disconnect: signout");
-				firebase.auth().signOut();
-			}
-		},
-
-		function(msg)
-		{
-			console.log("Disconnect fail: ");
-			console.log(msg);
-		}
-	);
-}
 
 window.onerror = function(what, line, file)
 {
 	console.log("ERROR! " + what + '; ' + line + '; ' + file);
 };
 
-function handleOpenURL (url) {
-	console.log("App opened by URL: " + url);
-}
-
-
-
-var SpreadsheetId  = '1Lk2Ni4po21fw1tbQp_4jL1kWcwapBil2OF3N2gMZmxs';
-var TemplateSheetId = '1sme9DQeCuH1fuZCV_gU2I4dziQ_Kt4tS_rHe2kCTbZc'
-
-var DateColumn     = "A";
-var ValueColumn    = "B";
-var NameColumn     = "C";
-var CategoryColumn = "D";
-var MaxRecordIndex = 500;
-
-var OutcomeCategoriesPosition = "I2:I21";
-var IncomeCategoriesPosition  = "L2:L21";
-
-var OutcomeCategoryColumn = "I";
-var IncomeCategoryColumn = "L";
-
-var IncomeCategoryList = {};
-var OutcomeCategoryList = {};
-
-var MaxCategoryIndex = 21;
-
-var SummaryPosition = "G2:G10";
-
-var ExpenseListPosition = "A2:D500";
-var ExpenseList = {};
-
-var TemplateSheetName = "newTemplate";
-
-var SheetList = {};
-var CurrentSheetName = "";
-
-var StartPosition   = 0;
-var EndPosition     = 1;
-var IncomePosition  = 3;
-var OutcomePosition = 4;
-var LimitPosition   = 6;
-var BalancePosition = 8;
-
-
-/************************************** ON LOAD *********************************************/
-function OnWebpageLoad()
-{
-	UpdateCategoryLists();
-	UpdateSheetList();
-	UpdateCurrentExpenseList();
-}
-
-/************************************ ADD EXPENSE *******************************************/
-function testFoo()
-{
-	AddExpense(1234, "blah", "meh");
-}
-var TemplateCheckString = "ExpenseRegisterTemplate by EleteleTeam";
-
-function AddExpense(value, name, category)
-{
-	var categoryFound = 0;
-	var recordIndex
-
-	for(i = 0; i < IncomeCategoryList.length; i++)
-	{
-		if(IncomeCategoryList[i] == category)
-		{
-			categoryFound = 1;
-			break;
-		}
-	}
-
-	for(i = 0; i < OutcomeCategoryList.length; i++)
-	{
-		if(OutcomeCategoryList[i][0] == category)
-		{
-			categoryFound = 1;
-			break;
-		}
-	}
-
-	if(categoryFound == 0)
-	{
-		alert("Category '" + category + "' not found!");
-		return;
-	}
-
-	// Search first free record
-	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:("B1:B" + MaxRecordIndex)} ).then
-	(
-		function(response)
-		{
-		    recordIndex = (response.result.values ? response.result.values.length : 0) + 1;
-
-		    console.log("First free record found at: " + recordIndex);
-		    SendExpense(value, name, category, recordIndex)
-		},
-
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-}
-
-function SendExpense(value, name, category, recordIndex)
-{
-	var coordinates = DateColumn + recordIndex + ":" + CategoryColumn + recordIndex;
-	var body = {"range":coordinates, "majorDimension":"ROWS", "values":[[GetFormattedDate(), value, name, category]]};
-
-	console.log(GetFormattedDate());
-
-	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinates, valueInputOption:'USER_ENTERED'}, body).then
-	(
-		function(response)
-		{
-			console.log(response.result);
-			CheckLimit();
-		},
-
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-}
-
-function CheckLimit()
-{
-	var outcome;
-	var limit;
-
-	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:SummaryPosition} ).then
-	(
-		function(response)
-		{
-			limit = response.result.values[LimitPosition];
-			outcome = response.result.values[OutcomePosition];
-
-			if((limit == 0) || (limit == null))
-			{
-				return;
-			}
-
-			if(outcome > limit)
-			{
-				alert("WARNING! Expense limit reached!");
-			}
-		},
-
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-}
-
-/************************************ SHEET MANAGEMENT *******************************************/
-
-function AddNewMonthSheet()
-{
-	var params =
-	{
-		spreadsheetId: TemplateSheetId,
-		sheetId: 0,
-	};
-
-	var copySheetToAnotherSpreadsheetRequestBody =
-	{
-		destinationSpreadsheetId: SpreadsheetId,
-	};
-
-	gapi.client.sheets.spreadsheets.sheets.copyTo(params, copySheetToAnotherSpreadsheetRequestBody).then
-	(
-		function(response)
-		{
-			console.log(response.result.sheetId);
-
-			NameNewTemplate(response.result.sheetId);
-		},
-
-		function(reason)
-		{
-			console.error('error: ' + reason.result.error.message);
-		}
-	);
-}
-
-function NameNewTemplate(id, callback)
-{
-	var name = GenerateSheetName();
-
-	var params =
-	{
-		spreadsheetId: SpreadsheetId,
-	};
-
-	var batchUpdateSpreadsheetRequestBody =
-	{
-		requests:
-		[
-			{
-				"updateSheetProperties":
-				{
-					"properties":
-					{
-						"sheetId": id,
-						"title": name,
-						"index": 0,
-					},
-
-					"fields": "title, index",
-				},
-			}
-		],
-	};
-
-	gapi.client.sheets.spreadsheets.batchUpdate(params, batchUpdateSpreadsheetRequestBody).then
-	(
-		function(response)
-		{
-			console.log(response.result);
-			UpdateSheetList();
-		},
-
-		function(reason)
-		{
-			console.error('error: ' + reason.result.error.message);
-		}
-	);
-}
-
-function UpdateSheetList()
-{
-	gapi.client.sheets.spreadsheets.get({spreadsheetId: SpreadsheetId}).then
-	(
-		function(response)
-		{
-			SheetList = response.result.sheets;
-
-			console.log("Sheets updated:");
-
-			for(i = 0; i < SheetList.length; i++)
-			{
-				console.log(SheetList[i].properties);
-			}
-
-			CurrentSheetName = SheetList[0].properties.title;
-
-			if(CurrentSheetName != GenerateSheetName())
-			{
-				AddNewMonthSheet();
-				return;
-			}
-		},
-
-		function(response)
-		{
-			console.log('Error: ' + response.result.error.message);
-		}
-	);
-}
-
-function ImportCategoriesToNewSheet()
-{
-
-}
-
-function SetNewSheetStartAmount()
-{
-
-}
-
-function GenerateSheetName()
-{
-	var date = new Date();
-	return ((date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + (date.getYear() - 100));
-	//return "05.18";
-
-}
-
-/*************************************** CATEGORIES *********************************************/
-
-function AddCategory(categoryName, categoryType)
-{
-	var coordinates;
-	var categoryIndex
-
-	for(i = 0; i < IncomeCategoryList.length; i++)
-	{
-		if(IncomeCategoryList[i] == categoryName)
-		{
-			alert("Category '" + categoryName + "' already exist! Please choose another category name.");
-			return;
-		}
-	}
-
-	for(i = 0; i < OutcomeCategoryList.length; i++)
-	{
-		if(OutcomeCategoryList[i][0] == categoryName)
-		{
-			alert("Category '" + categoryName + "' already exist! Please choose another category name.");
-			return;
-		}
-	}
-
-	coordinates = categoryType == "income" ? IncomeCategoriesPosition : OutcomeCategoriesPosition;
-
-	// Search first free category slot
-	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:coordinates} ).then
-	(
-		function(response)
-		{
-		    categoryIndex = (response.result.values ? response.result.values.length : 0) + 1 + 1;
-
-		    if(categoryIndex > MaxCategoryIndex)
-		    {
-			    alert("No more " + categoryType + " categories can be added.");
-				return;
-		    }
-
-		    console.log("First free " + categoryType + " category slot found at: " + categoryIndex);
-
-			coordinates = (categoryType == "income" ? IncomeCategoryColumn : OutcomeCategoryColumn) + categoryIndex;
-
-		    WriteCell(coordinates, categoryName, UpdateCategoryLists(null))
-		},
-
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-}
-
-function DeleteCategory(categoryName)
-{
-	var coordinates;
-	indexFound = -1;
-
-	for(i = 0; i < IncomeCategoryList.length; i++)
-	{
-		if(IncomeCategoryList[i] == categoryName)
-		{
-			coordinates = IncomeCategoryColumn + (i + 2);
-			indexFound = i;
-			break;
-		}
-	}
-
-	for(i = 0; i < OutcomeCategoryList.length; i++)
-	{
-		if(OutcomeCategoryList[i] == categoryName)
-		{
-			coordinates = OutcomeCategoryColumn + (i + 2);
-			indexFound = i;
-			break;
-		}
-	}
-
-	if(indexFound == -1)
-	{
-		alert("Category to delete not found!");
-		return;
-	}
-
-	if(indexFound == 0)
-	{
-		alert("Unable to delete default category!");
-		return;
-	}
-
-	WriteCell(coordinates, "", null);
-}
-
-function UpdateCategoryLists(callback)
-{
-	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:IncomeCategoriesPosition} ).then
-	(
-		function(response)
-		{
-			IncomeCategoryList = response.result.values;
-			console.log("Income categories updated: " + IncomeCategoryList);
-
-			gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:OutcomeCategoriesPosition} ).then
-			(
-				function(response)
-				{
-					OutcomeCategoryList = response.result.values;
-					console.log("Outcome categories updated: " + OutcomeCategoryList);
-
-					if(callback != null)
-					{
-						callback();
-					}
-				},
-
-				function(reason)
-				{
-					console.error('Error: ' + reason.result.error.message);
-				}
-			);
-		},
-
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-}
-
-
-function GetSpreadsheetList(callback)
-{
-	var currentSpreadsheetFound = 0;
-	
-	console.log("Updating spreadsheet list... ");
-	
-	gapi.client.drive.files.list({'pageSize': 100, 'fields': "nextPageToken, files(id, name)", 'q' : "fullText contains '" + TemplateCheckString + "'"}).then
-	(
-		function(response)
-		{
-			console.log(response.result.files);
-			
-			SpreadsheetList = response.result.files;
-			
-			for(i = 0; i < SpreadsheetList.length; i++)
-			{
-				if(SpreadsheetList[i].id == SpreadsheetId)
-				{
-					currentSpreadsheetFound = 1;
-				}
-			}
-			
-			if(!currentSpreadsheetFound)
-			{
-				SpreadsheetList.push({"id" : SpreadsheetId, "name" : NewCreatedSpreadsheetName});
-			}
-			
-			if(callback != null)
-			{
-				callback();
-			}
-		}
-	);
-}
-
-/************************************* AUTHORIZATION ********************************************/
-
-
-/************************************** EXPENSE LIST ********************************************/
-
-function UpdateCurrentExpenseList()
-{
-	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:ExpenseListPosition} ).then
-	(
-		function(response)
-		{
-			ExpenseList = response.result.values;
-
-			console.log("Expense list updated");
-
-			if(ExpenseList == null)
-				return;
-
-			for(i = 0; i < ExpenseList.length; i++)
-			{
-				console.log(ExpenseList[i]);
-			}
-		},
-
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-}
-
-/**************************************** COMMON ***********************************************/
-
-function WriteCell(coordinate, value, callback)
-{
-	var body = {"range":coordinate, "majorDimension":"ROWS", "values":[[value]]};
-
-	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinate, valueInputOption:'USER_ENTERED'}, body).then
-	(
-		function(response)
-		{
-			console.log(response.result);
-
-			if(callback != null)
-			{
-				callback();
-			}
-		},
-
-		function(reason)
-		{
-			console.error('Error: ' + reason.result.error.message);
-		}
-	);
-}
-
-function GetFormattedDate() {
-    var date = new Date();
-
-	var str = date.getDate() + "." + (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear();
-    return str;
-}
-
 </script>
 
 <script src="https://apis.google.com/js/api.js"></script>
 <script>handleClientLoad();</script>
 
-</body>
+
+	</body>
+	  	
 </html>
+
