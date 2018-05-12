@@ -23,7 +23,7 @@
     <div id="show_data">Co za gunwo.</div>
     <button onclick="OnWebpageLoad()">LOAD</button>
     <button onclick="testFoo()">ADD</button>
-    <button onclick="dummy()">del</button>
+    <button onclick="GetSpreadsheetList()">del</button>
     <br/><br/>
     <button onclick="login()">Login with Google+</button>
     <br/><br/>
@@ -43,8 +43,15 @@
 
 <script>
 
+
+
+var CLIENT_ID = '25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com'; // Client ID and API key from the Developer Console
+var API_KEY = 'AIzaSyCSq8EEMIB-9mPdyfl8oVYvGxUVjwHsRng';
+var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4", "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]; // Array of API discovery doc URLs for APIs used by the quickstart
+var SCOPE = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.metadata.readonly"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
+
 var config = {
-	apiKey: "AIzaSyCSq8EEMIB-9mPdyfl8oVYvGxUVjwHsRng",
+	apiKey: API_KEY,
 	authDomain: "",
 	databaseURL: "",
 	storageBucket: "",
@@ -79,8 +86,8 @@ function dummy()
 
 
 var CORDOVA_LOGIN_SETUP={
-    'webClientId' : '25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com',
-    'scope' : 'https://www.googleapis.com/auth/spreadsheets',
+    'webClientId' : CLIENT_ID,
+    'scope' : SCOPE,
     'offline': false
 };
 function cordovaLoginHandler(obj){
@@ -210,11 +217,6 @@ function handleOpenURL (url) {
 }
 
 
-var CLIENT_ID = '25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com'; // Client ID and API key from the Developer Console
-var API_KEY = 'AIzaSyCSq8EEMIB-9mPdyfl8oVYvGxUVjwHsRng';
-var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"]; // Array of API discovery doc URLs for APIs used by the quickstart
-var SCOPE = "https://www.googleapis.com/auth/spreadsheets"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
-
 
 var SpreadsheetId  = '1Lk2Ni4po21fw1tbQp_4jL1kWcwapBil2OF3N2gMZmxs';
 var TemplateSheetId = '1sme9DQeCuH1fuZCV_gU2I4dziQ_Kt4tS_rHe2kCTbZc'
@@ -267,7 +269,7 @@ function testFoo()
 {
 	AddExpense(1234, "blah", "meh");
 }
-
+var TemplateCheckString = "ExpenseRegisterTemplate by EleteleTeam";
 
 function AddExpense(value, name, category)
 {
@@ -487,8 +489,8 @@ function SetNewSheetStartAmount()
 function GenerateSheetName()
 {
 	var date = new Date();
-	//return ((date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + (date.getYear() - 100));
-	return "05.18";
+	return ((date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + (date.getYear() - 100));
+	//return "05.18";
 
 }
 
@@ -622,6 +624,42 @@ function UpdateCategoryLists(callback)
 	);
 }
 
+
+function GetSpreadsheetList(callback)
+{
+	var currentSpreadsheetFound = 0;
+	
+	console.log("Updating spreadsheet list... ");
+	
+	gapi.client.drive.files.list({'pageSize': 100, 'fields': "nextPageToken, files(id, name)", 'q' : "fullText contains '" + TemplateCheckString + "'"}).then
+	(
+		function(response)
+		{
+			console.log(response.result.files);
+			
+			SpreadsheetList = response.result.files;
+			
+			for(i = 0; i < SpreadsheetList.length; i++)
+			{
+				if(SpreadsheetList[i].id == SpreadsheetId)
+				{
+					currentSpreadsheetFound = 1;
+				}
+			}
+			
+			if(!currentSpreadsheetFound)
+			{
+				SpreadsheetList.push({"id" : SpreadsheetId, "name" : NewCreatedSpreadsheetName});
+			}
+			
+			if(callback != null)
+			{
+				callback();
+			}
+		}
+	);
+}
+
 /************************************* AUTHORIZATION ********************************************/
 
 function handleClientLoad() // On load, called to load the auth2 library and API client library.
@@ -635,13 +673,8 @@ function initClient() // Initializes the API client library and sets up sign-in 
 {
 	console.log("initClient called");
 
-	gapi.client.load("sheets", "v4",
-		function(response)
-		{
-
-			console.log("heheehe" + response);
-	}
-	);
+	gapi.client.load("sheets", "v4",function(response){console.log("sheets client loaded");});
+	gapi.client.load('drive', 'v3', function(response) {console.log("drive client loaded");});
 
 //	gapi.client.setApiKey("AIzaSyCSq8EEMIB-9mPdyfl8oVYvGxUVjwHsRng");
 
