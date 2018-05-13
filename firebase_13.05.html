@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Title</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+	</script>
+</head>
+<body>
+SPREEDSHEET: <input type ="text" id="SPREEDSHEET"><br>
+COKOLWIEK: <input type ="text" id="COKOLWIEK"><br>
+	
+<button id="save_button">SAVE</button>
+<button id="load_button">LOAD</button>
+<button id="clear_button">Clear</button>
+
+
+<script src="https://www.gstatic.com/firebasejs/5.0.1/firebase.js"></script>
+<script>
+	  // Initialize Firebase
+		  var config = {
+			apiKey: "AIzaSyB9BNy8dEOEzMYJScC1dOAsThKEjmko-_c",
+			authDomain: "test1-971ad.firebaseapp.com",
+			databaseURL: "https://test1-971ad.firebaseio.com",
+			projectId: "test1-971ad",
+			storageBucket: "test1-971ad.appspot.com",
+			messagingSenderId: "289620372461"
+		  };
+		  firebase.initializeApp(config);
+			var mail = "PREBILAS"
+			var rootRef = firebase.database().ref().child(mail);
+		$('#save_button').click(function(){
+		rootRef.set({
+		SPREEDSHEET:$('#SPREEDSHEET').val(),
+		COKOLWIEK:$('#COKOLWIEK').val(),
+		
+		});
+	  });
+	  $('#clear_button').click(function(){
+		$('#SPREEDSHEET').val('');
+		$('#COKOLWIEK').val('');
+			});
+	  $('#load_button').click(function(){
+		rootRef.on('value', function(snapshot){
+			$('#SPREEDSHEET').val(snapshot.child('SPREEDSHEET').val());
+			$('#COKOLWIEK').val(snapshot.child('COKOLWIEK').val());
+			})
+		})
+	  
+  
+</script>
+
+</body>
+</html>
