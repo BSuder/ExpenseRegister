@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	
+		<title>Google Sheets API Quickstart</title>
+		<meta charset='utf-8' />
+		
+	</head>
+	
+	<body onload="genAllMain()"> 
+	
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="js/backend.js"></script>
+		
+			<!--body onload="generateBasicDropDown()"-->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/TopButtonsStyle.css">
+	<link rel="stylesheet" href="css/loginPageStyle.css">
+	<script src="js/frontEndHelper.js"></script>
+	
+	
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+
+<div data-role="page" id="loginPage"  >
+		<div id="container"> 
+
+		<div id= "title" >
+			<h2 class="header">Expense Register</h2>  
+		</div>
+			
+		<div id="buttons">
+			<button id="authorize-button" onclick="handleAuthClick()" style="display: none;">Authorize</button>
+			<button id="signout-button" onclick="handleSignoutClick()" style="display: none;">Sign Out</button>
+			<a onclick="handleAuthClick()" class="btn btn-sm animated-button victoria-two">Login</a> 
+			<a href="https://accounts.google.com/SignUp?hl=pl" class="btn btn-sm animated-button victoria-three">Register</a> 
+		</div>
+			
+	</div>
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+	</div>
+	
+	<div data-role="page" id="pageone"  >
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+		<h2 align="center">Enter new expense</h2>
+		<h3 id="mainBalance"></h3>
+		<text>Category:</text> 
+		<select id="Category" name="cat">
+			<!--option value="Undefined"></option-->
+		</select>
+		<div><i class="fas fa-camera-retro"></i></div>
+		<text>Expense title:</text>
+			<input id="Title">
+		<text>Amount of effort</text>
+			<input id="Amount">
+		<button id="submit" onclick="getNewEffort()">Submit</button>
+	</div>
+  
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="Summary">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+
+	<div data-role="main" class="ui-content">
+		<h2 align="center">Summary of efforts</h2>
+		<div>
+		<select id="MonthsSummary" name="summ"></select>
+		<button onclick="getSelectedMonth()">Go</button>
+		</div>
+		<table id="MainSummary" class="greyGridTable">
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Amount</th>
+			</tr>
+		</thead>
+		</table>
+		
+		<script src="https://static.anychart.com/js/8.0.1/anychart-core.min.js"></script>
+		<script src="https://static.anychart.com/js/8.0.1/anychart-pie.min.js"></script>
+		<div id="MasterGraph"> 
+			<div id="PieGraph"></div>
+		</div>
+		<table id="testTable" class="greyGridTable">
+			<thead>
+				<tr>
+					<th>Category</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+  
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="History">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+	
+		<select id="MonthsSummaryHistory" name="summ"></select>
+		<button onclick="getSelectedMonthHistory()">Go</button>
+		<h2 align="center">History</h2>
+	
+		<table id="historyTable" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>Category</th>
+			<th>Name</th>
+			<th>Value</th>
+			<th>Date</th>
+			</tr>
+			</thead>
+		</table>
+	</div>
+
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="Settings">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+		<h2 align="center">Settings </h2>
+		
+		<h3 align="center">Category management</h3>
+
+		<div>
+		<table id="Categories" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>Category</th>
+			<th>Type</th>
+			<th></th>
+			</tr>
+			</thead>
+		</table>
+		</div>
+	
+		<h4 align="center">Expense limit</h4>
+		<input id="balance"></input>
+		<button id="saveBalance" onclick="sendBalance()">Save</button>
+	</div>
+
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+<div data-role="page" id="FilesManagement">
+	<div data-role="header">
+		<h1><font size="4">Expense Register</font></h1>
+		<div  class="tile_div">
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<div class="clear"></div>
+		</div>
+		<h2 class="currentFile"><h2>
+	</div>
+	
+	<div data-role="main" class="ui-content">
+	
+		<h2 align="center">Files management</h2>
+
+		<div>
+		<table id="FilesList" class="greyGridTable">
+			<thead>
+			<tr>
+			<th>File Name</th>
+			<th></th>
+			<th></th>
+			</tr>
+			</thead>
+		</table>
+		</div>
+		
+	</div>
+
+	<div data-role="footer">
+		<font size="2">Created by: eletele team</font>
+		<font size="2">2018</font>
+	</div>
+
+</div> 
+
+	</body>
+	  
+	<script async defer src="https://apis.google.com/js/api.js"
+	  onload="this.onload=function(){};handleClientLoad()"
+	  onreadystatechange="if (this.readyState === 'complete') this.onload()">
+	</script>
+	
+</html>
+
+
+
+
+
