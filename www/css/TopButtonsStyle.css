@@ -41,15 +41,14 @@ button :hover  {
 	width: 15%;
 	color : black;
     background-color: #dfdefc; /* Green */
-	float: left;
-    border: 1px solid green;
-	border: 1px solid #1811dd;
-	border-radius: 5px;
+	float: center;
+    border: 2% solid green;
+	border: 2% solid #1811dd;
+	border-radius: 10%;
     color: white;
-    padding: 15px ;
+    padding: 2% ;
     text-align: center;
     display: inline;
-    font-size: 10px;
 }
 
 .title_div a.last {
@@ -63,7 +62,7 @@ button :hover  {
 
 ///////////
 div.greyGridTable {
-  border: 2px solid #FFFFFF;
+  border: 2% solid #FFFFFF;
   width: 100%;
   text-align: center;
   border-collapse: collapse;
@@ -73,7 +72,7 @@ div.greyGridTable {
   padding: 3px 4px;
 }
 .divTable.greyGridTable .divTableBody .divTableCell {
-  font-size: 13px;
+  font-size: 10%;
 }
 .divTable.greyGridTable .divTableCell:nth-child(even) {
   background: #EBEBEB;
@@ -83,24 +82,24 @@ div.greyGridTable {
   border-bottom: 4px solid #333333;
 }
 .divTable.greyGridTable .divTableHeading .divTableHead {
-  font-size: 15px;
+  font-size: 15%;
   font-weight: bold;
   color: #333333;
   text-align: center;
-  border-left: 2px solid #333333;
+  border-left: 3% solid #333333;
 }
 .divTable.greyGridTable .divTableHeading .divTableHead:first-child {
   border-left: none;
 }
 
 .greyGridTable .tableFootStyle {
-  font-size: 14px;
+  font-size: 7%;
   font-weight: bold;
   color: #333333;
-  border-top: 4px solid #333333;
+  border-top: 3px solid #333333;
 }
 .greyGridTable .tableFootStyle {
-  font-size: 14px;
+  font-size: 5%;
 }
 /* DivTable.com */
 .divTable{ display: table; }
@@ -176,4 +175,8 @@ table.greyGridTable tfoot td {
     text-align: center;
     display: inline;
     font-size: 13px;
+}
+
+img{
+	 width: 100%
 }

@@ -1,27 +1,23 @@
-<!--
-Copyright 2018 Google LLC
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
 <!DOCTYPE html>
 <html>
-  <head>
-	<title>Google Sheets API Quickstart</title>
-	<meta charset='utf-8' />
-<body onload="generateBasicDropDown()">
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+    <head>
+	
+		<title>Google Sheets API Quickstart</title>
+		<meta charset='utf-8' />
+		
+	</head>
+	
+	<body> 
+	
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+		<script src="js/backend.js"></script>
+		
+			<!--body onload="generateBasicDropDown()"-->
+	<!--link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -29,26 +25,25 @@ limitations under the License.
 	<link rel="stylesheet" href="css/loginPageStyle.css">
 	<script src="js/frontEndHelper.js"></script>
 	
+	
 	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
-	
-<div data-role="page" id="loginPage"  >
+
+	<div data-role="page" id="loginPage"  >
 		<div id="container"> 
 
-		<div id= "title" >
-			<h2 class="header">Expense Register</h2>  
-		</div>
+			<div id= "title" >
+				<h1 class="header">Expense Register</h1>  
+			</div>
 			
-		<div id="gora">
-			<a href="adres"><img src="images_1.png"/>
-			<h3><font color="gray">Sign in with your Google Account</font></h3>
-		</div>
-		<div id="buttons">
-			<a onclick="doLogin()" class="btn btn-sm animated-button victoria-two">Login</a> 
-			<a href="https://accounts.google.com/SignUp?hl=pl" class="btn btn-sm animated-button victoria-three">Register</a> 
-		</div>
+			<div id="tile_div">
+				<button id="authorize-button" onclick="handleAuthClick()" style="display: none;">Authorize</button>
+				<button id="signout-button" onclick="handleSignoutClick()" style="display: none;">Sign Out</button>
+				<!--a onclick="handleAuthClick()" class="btn btn-sm animated-button victoria-two">Login</a> 
+				<a href="https://accounts.google.com/SignUp?hl=pl" class="btn btn-sm animated-button victoria-three">Register</a--> 
+			</div>
 			
-	</div>
+		</div>
 	<div data-role="footer">
 		<font size="2">Created by: eletele team</font>
 		<font size="2">2018</font>
@@ -59,12 +54,12 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
-			<button onclick="getSummary()"><img src="img/summary.png"/></button>
-			<button onclick="printHistory()"><img src="img/history.png"/></button>
-			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="handleSignoutClick()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -96,12 +91,12 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
-			<button onclick="getSummary()"><img src="img/summary.png"/></button>
-			<button onclick="printHistory()"><img src="img/history.png"/></button>
-			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="handleSignoutClick()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -109,7 +104,10 @@ limitations under the License.
 
 	<div data-role="main" class="ui-content">
 		<h2 align="center">Summary of efforts</h2>
-		
+		<div>
+		<select id="MonthsSummary" name="summ"></select>
+		<button onclick="getSelectedMonth()">Go</button>
+		</div>
 		<table id="MainSummary" class="greyGridTable">
 		<thead>
 			<tr>
@@ -145,18 +143,21 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
-			<button onclick="getSummary()"><img src="img/summary.png"/></button>
-			<button onclick="printHistory()"><img src="img/history.png"/></button>
-			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="handleSignoutClick()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
 	</div>
 	
 	<div data-role="main" class="ui-content">
+	
+		<select id="MonthsSummaryHistory" name="summ"></select>
+		<button onclick="getSelectedMonthHistory()">Go</button>
 		<h2 align="center">History</h2>
 	
 		<table id="historyTable" class="greyGridTable">
@@ -182,12 +183,12 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
-			<button onclick="getSummary()"><img src="img/summary.png"/></button>
-			<button onclick="printHistory()"><img src="img/history.png"/></button>
-			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="handleSignoutClick()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -210,14 +211,9 @@ limitations under the License.
 		</table>
 		</div>
 	
-		<h4 align="center">Monthly balance</h4>
+		<h4 align="center">Expense limit</h4>
 		<input id="balance"></input>
 		<button id="saveBalance" onclick="sendBalance()">Save</button>
-		
-		<h4 align="center">Alarm of high efforts</h4>
-		<input id="EffortsAlarn"></input>
-		<button id="saveAlarm" onclick="SaveNewAlarmLevel()">Save</button>
-		
 	</div>
 
 	<div data-role="footer">
@@ -231,12 +227,12 @@ limitations under the License.
 	<div data-role="header">
 		<h1><font size="4">Expense Register</font></h1>
 		<div  class="tile_div">
-			<button onclick="generateDropDown()" ><img src="img/main.png"/></button>
-			<button onclick="getSummary()"><img src="img/summary.png"/></button>
-			<button onclick="printHistory()"><img src="img/history.png"/></button>
-			<button onclick="manageCategories()"><img src="img/settings.png"/></button>
-			<button onclick="generateFileslist()"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="genAllMain()" ><img src="img/main.png"/></button>
+			<button onclick="genAllSummary()"><img src="img/summary.png"/></button>
+			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
+			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
+			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
+			<button onclick="handleSignoutClick()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -267,6 +263,16 @@ limitations under the License.
 
 </div> 
 
-  </body>
- 
+	</body>
+	  
+	<script async defer src="https://apis.google.com/js/api.js"
+	  onload="this.onload=function(){};handleClientLoad()"
+	  onreadystatechange="if (this.readyState === 'complete') this.onload()">
+	</script>
+	
 </html>
+
+
+
+
+

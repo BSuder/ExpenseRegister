@@ -1,16 +1,12 @@
 var IncomeCats =["wypłata", "stypendium", "bagiety"];
 var OutcomeCats = ["czesne", "mieszkanie", "media", "meh"];
-//var History = [["data1","kategoria1", "nazwa", 123], ["data2","kategoria2", "nazwa2", 456], ["data3","kategoria3", "nazwa3", 789]];
-//var IncomeSummary = [["in1", 123], ["in2",345], ["in3",543]];
-//var OutcomeSummary = [["out1", 12], ["out2",3], ["ou3",324]];
-//var FilesList = [["file1", 12325],["file2","23rre"],["file3","123ff34f"],["file4",13454]];
-var ActualSheetId = "34tgrdb";
+
+var ActualSheetId = "1Lk2Ni4po21fw1tbQp_4jL1kWcwapBil2OF3N2gMZmxs";
 var Balance = -1230.01;
 var Outcome = 123;
 var Income = 123.423;
 
 var Cats =[{"category":"Undefined", "type":-1},{"category":"Testing", "type":1},{"category":"Test", "type":-1},{"category":"3 linia", "type":1}];
-//var Wydatki = JSON.parseText('');
 
 var json = {
 	"chart": {
@@ -132,7 +128,6 @@ var chart;
 		var tmp = document.getElementById("MonthsSummary").value
 		UpdateSummary(tmp,genAll);
 	}
-  
   
     function getSummary(){
 	  

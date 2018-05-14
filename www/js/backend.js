@@ -847,6 +847,7 @@ function handleAuthClick() // Sign in the user upon button click.
 function handleSignoutClick() // Sign out the user upon button click.
 {
 	gapi.auth2.getAuthInstance().signOut();
+	window.location = "#loginPage";
 }
 
 
