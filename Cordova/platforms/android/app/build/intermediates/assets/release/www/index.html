@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="format-detection" content="telephone=no"/>
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"/>
+  <link rel="stylesheet" type="text/css" href="css/index.css"/>
+  <meta name="msapplication-tap-highlight" content="no"/>
+  <meta name="google-signin-client_id" content="25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com">
+  <title>Hello World</title>
+</head>
+<body>
+<div class="app">
+  <img id="image" style="position:absolute; top:10px; left:10px" src="" />
+
+  <h1>Google+ and Firebase</h1>
+
+  <div id="deviceready">
+    <p class="event listening">Connecting to Device</p>
+    <p class="event received">Device is Ready</p>
+
+    <p id="feedback">Meh...</p>
+    <div id="show_data">Co za gunwo.</div>
+    <button onclick="OnWebpageLoad()">LOAD</button>
+    <button onclick="testFoo()">ADD</button>
+    <button onclick="dummy()">del</button>
+    <br/><br/>
+    <button onclick="login()">Login with Google+</button>
+    <br/><br/>
+    <button onclick="trySilentLogin()">Try silent login with Google+</button>
+    <br/><br/>
+    <button onclick="logout()">Logout</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="disconnect()">Disconnect</button>
+    <br/><br/>
+    <button onclick="window.plugins.googleplus.getSigningCertificateFingerprint(function(res){alert(res)}, function(res){alert(res)})">get cert fingerprint (Android)</button>
+  </div>
+</div>
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script src="js/firebase-3.6.4.js"></script>
+
+<script>
+
+var config = {
+	apiKey: "AIzaSyCSq8EEMIB-9mPdyfl8oVYvGxUVjwHsRng",
+	authDomain: "",
+	databaseURL: "",
+	storageBucket: "",
+	messagingSenderId: ""
+};
+
+app.initialize();
+firebase.initializeApp(config);
+
+
+firebase.auth().onAuthStateChanged(
+	function(user)
+	{
+		if (user)
+		{
+			alert("Logged in with: "+ user.email);
+			console.log(user);
+			console.log("onAuthStateChanged: logged IN");
+			trySilentLogin();
+		}
+		else {
+			alert('Logged out.');
+			console.log("onAuthStateChanged: logged OUT");
+		}
+	}
+);
+
+function dummy()
+{
+	console.log("dummy()");
+}
+
+
+var CORDOVA_LOGIN_SETUP={
+    'webClientId' : '25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com',
+    'scope' : 'https://www.googleapis.com/auth/spreadsheets',
+    'offline': false
+};
+function cordovaLoginHandler(obj){
+    console.log("Login step 1 with: " + obj.displayName + ", " + obj.email);
+
+    console.log("Tokeeeen: " + obj.accessToken);
+
+    gapi.client.setToken({access_token: obj.accessToken});
+    gapi.client.init({apiKey: API_KEY, clientId: CLIENT_ID, discoveryDocs: DISCOVERY_DOCS, scope: SCOPES});
+
+
+    if(!firebase.auth().currentUser)
+    {
+        console.log("Login step 2");
+
+        firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(obj.idToken)).then
+        (
+            function(success)
+            {
+                console.log("Login success: ");
+                console.log(success);
+            }
+        )
+            .catch
+            (
+                function(error)
+                {
+                    console.log("Login error: ");
+                    console.log(error);
+                }
+            );
+    }
+    else
+    {
+        console.log("Login error: Already signed in database!");
+    }
+}
+
+function login()
+{
+	window.plugins.googleplus.login
+	(
+	    CORDOVA_LOGIN_SETUP,
+        cordovaLoginHandler,
+		function(msg)
+		{
+			console.log("Login error: ");
+			console.log(msg);
+		}
+	);
+}
+
+
+function trySilentLogin()
+{
+	window.plugins.googleplus.trySilentLogin
+	(
+	    CORDOVA_LOGIN_SETUP,
+		cordovaLoginHandler,
+		function (msg)
+		{
+			console.log("Silent login error: ");
+			console.log(msg);
+		}
+	);
+}
+
+
+
+
+function logout()
+{
+	window.plugins.googleplus.logout
+	(
+		function(msg)
+		{
+			console.log("Logout step 1: ");
+			console.log(msg);
+
+			if(firebase.auth().currentUser)
+			{
+				console.log("Logout step 2.");
+				firebase.auth().signOut();
+			}
+		},
+
+		function(msg)
+		{
+			console.log("Logout fail: ");
+			console.log(msg);
+		}
+	);
+}
+
+function disconnect()
+{
+	window.plugins.googleplus.disconnect
+	(
+		function(msg)
+		{
+			console.log("disconnect: ");
+			console.log(msg);
+
+			if(firebase.auth().currentUser)
+			{
+
+				console.log("disconnect: signout");
+				firebase.auth().signOut();
+			}
+		},
+
+		function(msg)
+		{
+			console.log("Disconnect fail: ");
+			console.log(msg);
+		}
+	);
+}
+
+window.onerror = function(what, line, file)
+{
+	console.log("ERROR! " + what + '; ' + line + '; ' + file);
+};
+
+function handleOpenURL (url) {
+	console.log("App opened by URL: " + url);
+}
+
+
+var CLIENT_ID = '25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com'; // Client ID and API key from the Developer Console
+var API_KEY = 'AIzaSyCSq8EEMIB-9mPdyfl8oVYvGxUVjwHsRng';
+var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"]; // Array of API discovery doc URLs for APIs used by the quickstart
+var SCOPE = "https://www.googleapis.com/auth/spreadsheets"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
+
+
+var SpreadsheetId  = '1Lk2Ni4po21fw1tbQp_4jL1kWcwapBil2OF3N2gMZmxs';
+var TemplateSheetId = '1sme9DQeCuH1fuZCV_gU2I4dziQ_Kt4tS_rHe2kCTbZc'
+
+var DateColumn     = "A";
+var ValueColumn    = "B";
+var NameColumn     = "C";
+var CategoryColumn = "D";
+var MaxRecordIndex = 500;
+
+var OutcomeCategoriesPosition = "I2:I21";
+var IncomeCategoriesPosition  = "L2:L21";
+
+var OutcomeCategoryColumn = "I";
+var IncomeCategoryColumn = "L";
+
+var IncomeCategoryList = {};
+var OutcomeCategoryList = {};
+
+var MaxCategoryIndex = 21;
+
+var SummaryPosition = "G2:G10";
+
+var ExpenseListPosition = "A2:D500";
+var ExpenseList = {};
+
+var TemplateSheetName = "newTemplate";
+
+var SheetList = {};
+var CurrentSheetName = "";
+
+var StartPosition   = 0;
+var EndPosition     = 1;
+var IncomePosition  = 3;
+var OutcomePosition = 4;
+var LimitPosition   = 6;
+var BalancePosition = 8;
+
+
+/************************************** ON LOAD *********************************************/
+function OnWebpageLoad()
+{
+	UpdateCategoryLists();
+	UpdateSheetList();
+	UpdateCurrentExpenseList();
+}
+
+/************************************ ADD EXPENSE *******************************************/
+function testFoo()
+{
+	AddExpense(1234, "blah", "meh");
+}
+
+
+function AddExpense(value, name, category)
+{
+	var categoryFound = 0;
+	var recordIndex
+
+	for(i = 0; i < IncomeCategoryList.length; i++)
+	{
+		if(IncomeCategoryList[i] == category)
+		{
+			categoryFound = 1;
+			break;
+		}
+	}
+
+	for(i = 0; i < OutcomeCategoryList.length; i++)
+	{
+		if(OutcomeCategoryList[i][0] == category)
+		{
+			categoryFound = 1;
+			break;
+		}
+	}
+
+	if(categoryFound == 0)
+	{
+		alert("Category '" + category + "' not found!");
+		return;
+	}
+
+	// Search first free record
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:("B1:B" + MaxRecordIndex)} ).then
+	(
+		function(response)
+		{
+		    recordIndex = (response.result.values ? response.result.values.length : 0) + 1;
+
+		    console.log("First free record found at: " + recordIndex);
+		    SendExpense(value, name, category, recordIndex)
+		},
+
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function SendExpense(value, name, category, recordIndex)
+{
+	var coordinates = DateColumn + recordIndex + ":" + CategoryColumn + recordIndex;
+	var body = {"range":coordinates, "majorDimension":"ROWS", "values":[[GetFormattedDate(), value, name, category]]};
+
+	console.log(GetFormattedDate());
+
+	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinates, valueInputOption:'USER_ENTERED'}, body).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+			CheckLimit();
+		},
+
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function CheckLimit()
+{
+	var outcome;
+	var limit;
+
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:SummaryPosition} ).then
+	(
+		function(response)
+		{
+			limit = response.result.values[LimitPosition];
+			outcome = response.result.values[OutcomePosition];
+
+			if((limit == 0) || (limit == null))
+			{
+				return;
+			}
+
+			if(outcome > limit)
+			{
+				alert("WARNING! Expense limit reached!");
+			}
+		},
+
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+/************************************ SHEET MANAGEMENT *******************************************/
+
+function AddNewMonthSheet()
+{
+	var params =
+	{
+		spreadsheetId: TemplateSheetId,
+		sheetId: 0,
+	};
+
+	var copySheetToAnotherSpreadsheetRequestBody =
+	{
+		destinationSpreadsheetId: SpreadsheetId,
+	};
+
+	gapi.client.sheets.spreadsheets.sheets.copyTo(params, copySheetToAnotherSpreadsheetRequestBody).then
+	(
+		function(response)
+		{
+			console.log(response.result.sheetId);
+
+			NameNewTemplate(response.result.sheetId);
+		},
+
+		function(reason)
+		{
+			console.error('error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function NameNewTemplate(id, callback)
+{
+	var name = GenerateSheetName();
+
+	var params =
+	{
+		spreadsheetId: SpreadsheetId,
+	};
+
+	var batchUpdateSpreadsheetRequestBody =
+	{
+		requests:
+		[
+			{
+				"updateSheetProperties":
+				{
+					"properties":
+					{
+						"sheetId": id,
+						"title": name,
+						"index": 0,
+					},
+
+					"fields": "title, index",
+				},
+			}
+		],
+	};
+
+	gapi.client.sheets.spreadsheets.batchUpdate(params, batchUpdateSpreadsheetRequestBody).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+			UpdateSheetList();
+		},
+
+		function(reason)
+		{
+			console.error('error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function UpdateSheetList()
+{
+	gapi.client.sheets.spreadsheets.get({spreadsheetId: SpreadsheetId}).then
+	(
+		function(response)
+		{
+			SheetList = response.result.sheets;
+
+			console.log("Sheets updated:");
+
+			for(i = 0; i < SheetList.length; i++)
+			{
+				console.log(SheetList[i].properties);
+			}
+
+			CurrentSheetName = SheetList[0].properties.title;
+
+			if(CurrentSheetName != GenerateSheetName())
+			{
+				AddNewMonthSheet();
+				return;
+			}
+		},
+
+		function(response)
+		{
+			console.log('Error: ' + response.result.error.message);
+		}
+	);
+}
+
+function ImportCategoriesToNewSheet()
+{
+
+}
+
+function SetNewSheetStartAmount()
+{
+
+}
+
+function GenerateSheetName()
+{
+	var date = new Date();
+	//return ((date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + (date.getYear() - 100));
+	return "05.18";
+
+}
+
+/*************************************** CATEGORIES *********************************************/
+
+function AddCategory(categoryName, categoryType)
+{
+	var coordinates;
+	var categoryIndex
+
+	for(i = 0; i < IncomeCategoryList.length; i++)
+	{
+		if(IncomeCategoryList[i] == categoryName)
+		{
+			alert("Category '" + categoryName + "' already exist! Please choose another category name.");
+			return;
+		}
+	}
+
+	for(i = 0; i < OutcomeCategoryList.length; i++)
+	{
+		if(OutcomeCategoryList[i][0] == categoryName)
+		{
+			alert("Category '" + categoryName + "' already exist! Please choose another category name.");
+			return;
+		}
+	}
+
+	coordinates = categoryType == "income" ? IncomeCategoriesPosition : OutcomeCategoriesPosition;
+
+	// Search first free category slot
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:coordinates} ).then
+	(
+		function(response)
+		{
+		    categoryIndex = (response.result.values ? response.result.values.length : 0) + 1 + 1;
+
+		    if(categoryIndex > MaxCategoryIndex)
+		    {
+			    alert("No more " + categoryType + " categories can be added.");
+				return;
+		    }
+
+		    console.log("First free " + categoryType + " category slot found at: " + categoryIndex);
+
+			coordinates = (categoryType == "income" ? IncomeCategoryColumn : OutcomeCategoryColumn) + categoryIndex;
+
+		    WriteCell(coordinates, categoryName, UpdateCategoryLists(null))
+		},
+
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function DeleteCategory(categoryName)
+{
+	var coordinates;
+	indexFound = -1;
+
+	for(i = 0; i < IncomeCategoryList.length; i++)
+	{
+		if(IncomeCategoryList[i] == categoryName)
+		{
+			coordinates = IncomeCategoryColumn + (i + 2);
+			indexFound = i;
+			break;
+		}
+	}
+
+	for(i = 0; i < OutcomeCategoryList.length; i++)
+	{
+		if(OutcomeCategoryList[i] == categoryName)
+		{
+			coordinates = OutcomeCategoryColumn + (i + 2);
+			indexFound = i;
+			break;
+		}
+	}
+
+	if(indexFound == -1)
+	{
+		alert("Category to delete not found!");
+		return;
+	}
+
+	if(indexFound == 0)
+	{
+		alert("Unable to delete default category!");
+		return;
+	}
+
+	WriteCell(coordinates, "", null);
+}
+
+function UpdateCategoryLists(callback)
+{
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:IncomeCategoriesPosition} ).then
+	(
+		function(response)
+		{
+			IncomeCategoryList = response.result.values;
+			console.log("Income categories updated: " + IncomeCategoryList);
+
+			gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:OutcomeCategoriesPosition} ).then
+			(
+				function(response)
+				{
+					OutcomeCategoryList = response.result.values;
+					console.log("Outcome categories updated: " + OutcomeCategoryList);
+
+					if(callback != null)
+					{
+						callback();
+					}
+				},
+
+				function(reason)
+				{
+					console.error('Error: ' + reason.result.error.message);
+				}
+			);
+		},
+
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+/************************************* AUTHORIZATION ********************************************/
+
+function handleClientLoad() // On load, called to load the auth2 library and API client library.
+{
+    gapi.load('auth2', function () {
+	    gapi.load('client', initClient);
+    });
+}
+
+function initClient() // Initializes the API client library and sets up sign-in state listeners.
+{
+	console.log("initClient called");
+
+	gapi.client.load("sheets", "v4",
+		function(response)
+		{
+
+			console.log("heheehe" + response);
+	}
+	);
+
+//	gapi.client.setApiKey("AIzaSyCSq8EEMIB-9mPdyfl8oVYvGxUVjwHsRng");
+
+//	.then
+//	(
+//		function()
+//		{
+//			console.log("initClient ok ?");
+//		  //gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus); // Listen for sign-in state changes.
+//		  //updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get()); // Handle the initial sign-in state.
+//
+//		  //OnWebpageLoad();
+//		}
+//	);
+}
+
+function updateSigninStatus(isSignedIn) // Called when the signed in status changes, to update the UI appropriately. After a sign-in, the API is called.
+{
+	if(isSignedIn)
+	{
+		console.log("gapi signed in");
+	}
+	else
+	{
+		console.log("gapi NOT signed in");
+	}
+}
+
+function handleAuthClick() // Sign in the user upon button click.
+{
+	gapi.auth2.getAuthInstance().signIn();
+}
+
+function handleSignoutClick() // Sign out the user upon button click.
+{
+	gapi.auth2.getAuthInstance().signOut();
+}
+
+
+/************************************** EXPENSE LIST ********************************************/
+
+function UpdateCurrentExpenseList()
+{
+	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:ExpenseListPosition} ).then
+	(
+		function(response)
+		{
+			ExpenseList = response.result.values;
+
+			console.log("Expense list updated");
+
+			if(ExpenseList == null)
+				return;
+
+			for(i = 0; i < ExpenseList.length; i++)
+			{
+				console.log(ExpenseList[i]);
+			}
+		},
+
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+/**************************************** COMMON ***********************************************/
+
+function WriteCell(coordinate, value, callback)
+{
+	var body = {"range":coordinate, "majorDimension":"ROWS", "values":[[value]]};
+
+	gapi.client.sheets.spreadsheets.values.update( {spreadsheetId:SpreadsheetId, range:coordinate, valueInputOption:'USER_ENTERED'}, body).then
+	(
+		function(response)
+		{
+			console.log(response.result);
+
+			if(callback != null)
+			{
+				callback();
+			}
+		},
+
+		function(reason)
+		{
+			console.error('Error: ' + reason.result.error.message);
+		}
+	);
+}
+
+function GetFormattedDate() {
+    var date = new Date();
+
+	var str = date.getDate() + "." + (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear();
+    return str;
+}
+
+</script>
+
+<script src="https://apis.google.com/js/api.js"></script>
+<script>handleClientLoad();</script>
+
+</body>
+</html>
