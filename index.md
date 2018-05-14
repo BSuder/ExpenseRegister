@@ -14,9 +14,9 @@
 - files management
 
 ## Project pages:
-- Trello: https://trello.com/b/T8FIOUO0/expenseregister
-- Time register: https://docs.google.com/spreadsheets/d/1iL0bBBcfAAGY_KE2Ykyt6dlrWANMVy2Xddl-OZ1E-HM/edit#gid=0
-- Prototype: https://github.com/BSuder/ExpenseRegister/blob/PrototypAplikacji/Prototype1.pdf
+- [Trello](https://trello.com/b/T8FIOUO0/expenseregister)
+- [Time register](https://docs.google.com/spreadsheets/d/1iL0bBBcfAAGY_KE2Ykyt6dlrWANMVy2Xddl-OZ1E-HM/edit#gid=0)
+- [Prototype](https://github.com/BSuder/ExpenseRegister/blob/PrototypAplikacji/Prototype1.pdf)
 
 ## Developers:
 Adam Włodarczyk
