@@ -11,6 +11,8 @@ var NameColumn     = "C";
 var CategoryColumn = "D";
 var MaxRecordIndex = 500;
 
+var CurrentMail = "";
+
 var LimitCellPosition = "G8";
 
 var OutcomeCategoriesPosition = "I2:I21";
@@ -332,7 +334,7 @@ function NameNewTemplate(id, callback)
 			}
 			else
 			{
-				SaveSpreadsheetToFirebase();
+				SaveToFirebase(CurrentMail, SpreadsheetId)
 				DeleteDefaultSheet(callback);
 			}
 		}, 
@@ -449,11 +451,6 @@ function CreateNewSpreadsheet(name, callback) {
 	);
 }
 
-function SaveSpreadsheetToFirebase()
-{
-	console.log("SAVE TO FIREBASE");
-}
-
 function DeleteDefaultSheet(callback)
 {
 	var params = 
@@ -528,7 +525,7 @@ function ChooseExistingSpreadsheet(spreadsheetId)
 	
 	SpreadsheetId = spreadsheetId;
 	UpdateCategoryLists(UpdateSheetList);
-	SaveSpreadsheetToFirebase();
+	SaveToFirebase(CurrentMail, SpreadsheetId)
 }
 
 /*************************************** CATEGORIES *********************************************/

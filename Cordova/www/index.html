@@ -284,12 +284,15 @@ var API_KEY = 'AIzaSyCSq8EEMIB-9mPdyfl8oVYvGxUVjwHsRng';
 var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4", "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]; // Array of API discovery doc URLs for APIs used by the quickstart
 var SCOPE = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.metadata.readonly"; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
 
+
+
 var config = {
 	apiKey: API_KEY,
-	authDomain: "",
-	databaseURL: "",
-	storageBucket: "",
-	messagingSenderId: ""
+	authDomain: "test1-971ad.firebaseapp.com",
+	databaseURL: "https://test1-971ad.firebaseio.com",
+	projectId: "test1-971ad",
+	storageBucket: "test1-971ad.appspot.com",
+	messagingSenderId: "289620372461"
 };
 
 var CORDOVA_LOGIN_SETUP={
@@ -310,6 +313,8 @@ firebase.auth().onAuthStateChanged
 		{
 			console.log("Firebase LOGGED IN.")
 			console.log(user);
+			
+			LoadFromFirebase(CurrentMail);
 		}
 		else
 		{
@@ -321,6 +326,8 @@ firebase.auth().onAuthStateChanged
 
 function cordovaLoginHandler(obj)
 {
+	CurrentMail = obj.email.replace(/\./g,'')
+
     console.log("Login() OK: " + obj.displayName + ", " + obj.email);
 
     gapi.client.setToken({access_token: obj.accessToken});
@@ -413,6 +420,28 @@ function Logout()
 	);
 }
 
+function SaveToFirebase(mail, spreadsheetId)
+{
+	console.log("Firebase SAVE for mail " + mail + " : " + spreadsheetId);
+	var rootRef = firebase.database().ref().child(mail);  
+	rootRef.set({'spreadsheetId' : spreadsheetId});
+}
+
+function LoadFromFirebase(mail)
+{
+	var rootRef = firebase.database().ref().child(mail);  
+
+	rootRef.on
+	(
+		'value',
+
+		function(snapshot)
+		{
+			SpreadsheetId = snapshot.child('spreadsheetId').val();
+			console.log("Firebase LOAD for mail " + mail + " : " + SpreadsheetId);
+		}
+	)
+}
 
 function handleClientLoad() // On load, called to load the auth2 library and API client library.
 {
