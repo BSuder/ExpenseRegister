@@ -1,9 +1,11 @@
 var IncomeCats =["wypłata", "stypendium", "bagiety"];
 var OutcomeCats = ["czesne", "mieszkanie", "media", "meh"];
 //var History = [["data1","kategoria1", "nazwa", 123], ["data2","kategoria2", "nazwa2", 456], ["data3","kategoria3", "nazwa3", 789]];
-//var IncomeSummary = [["in1", 123], ["in2",345], ["in3",543]];
-//var OutcomeSummary = [["out1", 12], ["out2",3], ["ou3",324]];
+//var IncomeCatsValue = [["in1", 123], ["in2",345], ["in3",543]];
+//var OutcomeCatsValue = [["out1", 12], ["out2",3], ["ou3",324]];
 //var FilesList = [["file1", 12325],["file2","23rre"],["file3","123ff34f"],["file4",13454]];
+var IncomeCatsValue = [];
+var OutcomeCatsValue = [];
 var ActualSheetId = "34tgrdb";
 var Balance = -1230.01;
 var Outcome = 123;
@@ -139,6 +141,8 @@ var chart;
 		Income = GetLocalSummaryIncome();
 		Outcome = GetLocalSummaryOutcome();
 		Balance = GetLocalSummaryBalance();
+		OutcomeCatsValue = GetLocalOutcomeSummary();
+		IncomeCatsValue = GetLocalIncomeSummary();
 		
 		printPie();
 		
@@ -152,27 +156,27 @@ var chart;
 		}
 
 		// print all income
-		for (var ite=0; ite<IncomeSummary.length; ite++){
+		for (var ite=0; ite<IncomeCatsValue.length; ite++){
 			// Create an empty <tr> element and add it to the 1st position of the table:
 			var row = table.insertRow(1);
 			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
 			var cell1 = row.insertCell(0);
 			var cell2 = row.insertCell(1);
 			// Add some text to the new cells:
-			cell1.innerHTML = IncomeSummary[ite][0];
-			cell2.innerHTML = IncomeSummary[ite][1];
+			cell1.innerHTML = IncomeCatsValue[ite][0];
+			cell2.innerHTML = IncomeCatsValue[ite][1];
 		}
 
 		// print all outcome
-		for (var ite=0; ite<OutcomeSummary.length; ite++){
+		for (var ite=0; ite<OutcomeCatsValue.length; ite++){
 			// Create an empty <tr> element and add it to the 1st position of the table:
 			var row = table.insertRow(1);
 			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
 			var cell1 = row.insertCell(0);
 			var cell2 = row.insertCell(1);
 			// Add some text to the new cells:
-			cell1.innerHTML = OutcomeSummary[ite][0];
-			cell2.innerHTML = "-" + OutcomeSummary[ite][1];
+			cell1.innerHTML = OutcomeCatsValue[ite][0];
+			cell2.innerHTML = "-" + OutcomeCatsValue[ite][1];
 		}
 		
 		// set balance 
@@ -389,16 +393,23 @@ var chart;
 	function printPie() {
 
 		deletePie();
-	
+		console.log("dla forntu zmienne: ");
+		console.log(OutcomeCatsValue);
+		
+		var temporary = [];
 		var tmp = [];
-		for(iter in Cats){
-			tmp.push([Cats[iter].category, Cats[iter].type]);
-		}
+		var inInt;
 
+		for(ite in OutcomeCatsValue){
+			temporary.push([OutcomeCatsValue[ite][0],parseFloat(OutcomeCatsValue[ite][1])]);
+		}
+		
+		console.log("po parsowaniu: ");
+		console.log(temporary);
 		json = {
 			"chart": {
 				"type": "pie",
-				"data": OutcomeSummary
+				"data": temporary
 			}
 		};
 

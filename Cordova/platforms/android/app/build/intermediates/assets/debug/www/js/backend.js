@@ -60,16 +60,11 @@ function GetLocalOutcomeSummary()
 	{
 		if(OutcomeSummary[i][0] == "")
 		{
-			outList = slice(0,i);
-			
-			console.log(outList);
-			
-			return outList;
-			
-			
+			OutcomeSummary = OutcomeSummary.splice(i, 1);
 		}
 	}
-	
+	console.log("Outcome outlist:");
+	console.log(OutcomeSummary);
 	return OutcomeSummary;
 }
 
@@ -81,16 +76,11 @@ function GetLocalIncomeSummary()
 	{
 		if(IncomeSummary[i][0] == "")
 		{
-			outList = slice(0,i);
-			
-			console.log(outList);
-			
-			return outList;
-			
-			
+			IncomeSummary = IncomeSummary.splice(i, 1);
 		}
 	}
-	
+	console.log("Income outlist:");
+	console.log(IncomeSummary);
 	return IncomeSummary;
 }
 

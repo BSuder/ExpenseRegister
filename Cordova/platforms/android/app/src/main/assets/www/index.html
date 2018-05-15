@@ -12,16 +12,12 @@
 
 	</head>
 	
-	<body onload="genAllMain()"> 
+	<body> 
 	
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
 		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
 		
-			<!--body onload="generateBasicDropDown()"-->
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -49,9 +45,8 @@
 		</div>
 			
 		<div id="buttons">
-			<a onclick="Login()" class="btn btn-sm animated-button victoria-two">Login</a> 
-			<a onclick="Logout()" class="btn btn-sm animated-button victoria-two">Logout</a> 	
-			<a href="https://accounts.google.com/SignUp?hl=pl" class="btn btn-sm animated-button victoria-three">Register</a> 
+			<button onclick="Login()">Login</button> 
+			<button onclick="Logout()">Logout</button> 	
 		</div>
 			
 	</div>
@@ -70,7 +65,7 @@
 			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
 			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
 			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="Logout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -107,7 +102,7 @@
 			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
 			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
 			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="Logout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -159,7 +154,7 @@
 			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
 			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
 			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="Logout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -199,7 +194,7 @@
 			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
 			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
 			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="Logout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -243,7 +238,7 @@
 			<button onclick="genAllHistory()"><img src="img/history.png"/></button>
 			<button onclick="genAllSettings()"><img src="img/settings.png"/></button>
 			<button onclick="refreshSpreadsheetList();"><img src="img/manage.png"/></button>
-			<button onclick="doLogout()"><img class="last" src="img/logout.png"/></button>
+			<button onclick="Logout()"><img class="last" src="img/logout.png"/></button>
 			<div class="clear"></div>
 		</div>
 		<h2 class="currentFile"><h2>
@@ -297,7 +292,7 @@ var config = {
 
 var CORDOVA_LOGIN_SETUP={
     'webClientId' : CLIENT_ID,
-    'scope' : SCOPE,
+    'scopes' : SCOPE,
     'offline': false
 };
 
@@ -314,7 +309,7 @@ firebase.auth().onAuthStateChanged
 			console.log("Firebase LOGGED IN.")
 			console.log(user);
 			
-			LoadFromFirebase(CurrentMail);
+			
 		}
 		else
 		{
@@ -344,6 +339,7 @@ function cordovaLoginHandler(obj)
             function(success)
             {
                 console.log("Firebase login OK: ");
+				timeout(LoadFromFirebase(CurrentMail), 3000);
                 console.log(success);
             }
         )
@@ -405,11 +401,12 @@ function Logout()
 			
 			console.log("Logout() OK");
 			console.log(msg);
-
+			window.location = "#loginPage";
 			if(firebase.auth().currentUser)
 			{
 				console.log("Firebase logout..");
 				firebase.auth().signOut();
+				
 			}
 		},
 		function(msg)
@@ -429,6 +426,8 @@ function SaveToFirebase(mail, spreadsheetId)
 
 function LoadFromFirebase(mail)
 {
+	console.log("Loading from firebase......");
+
 	var rootRef = firebase.database().ref().child(mail);  
 
 	rootRef.on
@@ -437,8 +436,19 @@ function LoadFromFirebase(mail)
 
 		function(snapshot)
 		{
-			SpreadsheetId = snapshot.child('spreadsheetId').val();
+			var id = snapshot.child('spreadsheetId').val();
+			
+			if(id == null)
+			{
+				console.log("FIREBASE NULL");
+				window.location = "#FilesManagement";
+				
+				return;
+			}
+			
+			SpreadsheetId = id;
 			console.log("Firebase LOAD for mail " + mail + " : " + SpreadsheetId);
+			window.location = "#mainPage";
 		}
 	)
 }
@@ -454,7 +464,7 @@ function initClient() // Initializes the API client library and sets up sign-in 
 {
 	console.log("initClient called");
 
-	gapi.client.load("sheets", "v4",function(response) {console.log("sheets client loaded"); trySilentLogin();});
+	gapi.client.load("sheets", "v4",function(response) {console.log("sheets client loaded");});
 	gapi.client.load('drive', 'v3', function(response) {console.log("drive client loaded");});
 }
 
