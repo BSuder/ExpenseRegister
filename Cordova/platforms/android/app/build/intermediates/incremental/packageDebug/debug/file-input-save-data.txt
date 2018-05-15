@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue May 15 22:28:59 CEST 2018
+#Tue May 15 22:49:10 CEST 2018
 60.set=ANDROID_RESOURCE
 52.set=ANDROID_RESOURCE
 53.base=C\:\\ExpenseRegister\\Cordova\\platforms\\android\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_

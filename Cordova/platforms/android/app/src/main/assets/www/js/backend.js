@@ -711,7 +711,7 @@ function UpdateExpenseList(month, callback)
 /************************************** SUMMARY ********************************************/
 function UpdateSummary(month, callback)
 {
-	console.log("Updating summarry...");
+	console.log("Updating summarry for: " + month);
 	
 	// Get total summary
 	gapi.client.sheets.spreadsheets.values.get( {spreadsheetId:SpreadsheetId, range:month + "!" + SummaryPosition} ).then

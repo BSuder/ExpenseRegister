@@ -31,6 +31,7 @@ var chart;
 		generateDropDown();
 	}
 	
+	
 	function genAllSummary(){
 		UpdateSummary(CurrentSheetName,UpSummary);
 	}
@@ -132,7 +133,7 @@ var chart;
 	function getSelectedMonth(){
 		console.log("wybrano jakis miesiac");
 		var tmp = document.getElementById("MonthsSummary").value
-		UpdateSummary(tmp,genAllSummary);
+		UpdateSummary(tmp,UpSummary);
 	}
   
   
@@ -221,7 +222,7 @@ var chart;
 		var footer = table.createTFoot();
 
 		// Create an empty <tr> element and add it to the first position of <tfoot>:
-		var row = footer.insertRow(0);      
+		var row = footer.insertRow(0);   
 
 		// Insert a new cell (<td>) at the first position of the "new" <tr> element:
 		var cell1 = row.insertCell(0);
