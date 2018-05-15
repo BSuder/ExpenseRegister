@@ -415,7 +415,8 @@ var chart;
 
 		// create the chart
 		chart =  anychart.fromJson(json);
-
+		chart.title("Graph of all efforts");
+		chart.maxHeight("550px");
 		// display the chart in the container
 		chart.container('PieGraph');
 		// set legend position
@@ -451,7 +452,7 @@ var chart;
 		var helperButton = "<button onclick=NewFile()><img src=\"img/save.png\" /></button>";
 		
 		var newRow = table.insertRow(1);
-		// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+		// Insert newpx cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
 		var Name = newRow.insertCell(0);
 		var Bttn = newRow.insertCell(1);
 		
@@ -493,7 +494,7 @@ var chart;
 	}
 	
 	function setMainBalance(){
-		document.getElementById("mainBalance").innerHTML = "Balance: " + Balance;
+		
 	}
 	
 	function doLogin(){
