@@ -330,8 +330,8 @@ function cordovaLoginHandler(obj)
 
 	console.log("GAPI initialized.");
 	
-	UpdateCategoryLists(UpdateSheetList(generateDropDown));
-	
+	isCorrect(obj.email);
+		
     if(!firebase.auth().currentUser)
     {
         firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(obj.idToken)).then
@@ -478,7 +478,13 @@ window.onerror = function(what, line, file)
 </script>
 
 <script src="https://apis.google.com/js/api.js"></script>
-<script>handleClientLoad();</script>
+<script>
+
+handleClientLoad();
+Logout();
+firebase.auth().signOut();
+
+</script>
 
 
 	</body>

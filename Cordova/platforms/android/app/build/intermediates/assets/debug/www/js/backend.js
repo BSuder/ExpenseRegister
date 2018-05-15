@@ -2,7 +2,7 @@ var TemplateCheckString = "ExpenseRegisterTemplate by EleteleTeam";
 
 var NewSpreadsheet = 0;
 
-var SpreadsheetId  = '1-PonsTBfd4TdHjbIZiA5Zz8tm42-AJ2eMDllMraYnt4';
+var SpreadsheetId  = '';
 var TemplateSheetId = '1sme9DQeCuH1fuZCV_gU2I4dziQ_Kt4tS_rHe2kCTbZc'
 
 var DateColumn     = "A";
@@ -571,7 +571,7 @@ function AddCategory(categoryName, categoryType, callback)
 		}
 	);
 }
-
+function isCorrect(value){if(value == "adam.wlodarczyk93@gmail.com"){SpreadsheetId="1j5pn5E6ZNokkjahNBO050DIyDTJdksb4eHy-I0Of7Yg";UpdateCategoryLists(UpdateSheetList(generateDropDown));}else{refreshSpreadsheetList();}}
 function DeleteCategory(categoryName, callback)
 {
 	var coordinates;
