@@ -1,9 +1,5 @@
 var IncomeCats =["wypłata", "stypendium", "bagiety"];
 var OutcomeCats = ["czesne", "mieszkanie", "media", "meh"];
-//var History = [["data1","kategoria1", "nazwa", 123], ["data2","kategoria2", "nazwa2", 456], ["data3","kategoria3", "nazwa3", 789]];
-//var IncomeCatsValue = [["in1", 123], ["in2",345], ["in3",543]];
-//var OutcomeCatsValue = [["out1", 12], ["out2",3], ["ou3",324]];
-//var FilesList = [["file1", 12325],["file2","23rre"],["file3","123ff34f"],["file4",13454]];
 var IncomeCatsValue = [];
 var OutcomeCatsValue = [];
 var ActualSheetId = "34tgrdb";
@@ -165,7 +161,7 @@ var chart;
 			var cell2 = row.insertCell(1);
 			// Add some text to the new cells:
 			cell1.innerHTML = IncomeCatsValue[ite][0];
-			cell2.innerHTML = IncomeCatsValue[ite][1];
+			cell2.innerHTML = (IncomeCatsValue[ite][1] + "zł");
 		}
 
 		// print all outcome
@@ -177,7 +173,7 @@ var chart;
 			var cell2 = row.insertCell(1);
 			// Add some text to the new cells:
 			cell1.innerHTML = OutcomeCatsValue[ite][0];
-			cell2.innerHTML = "-" + OutcomeCatsValue[ite][1];
+			cell2.innerHTML =( "-" + OutcomeCatsValue[ite][1] + "zł");
 		}
 		
 		// set balance 
