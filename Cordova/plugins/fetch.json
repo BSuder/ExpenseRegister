@@ -1,0 +1,21 @@
+{
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-googleplus": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-googleplus"
+    },
+    "is_top_level": true,
+    "variables": {
+      "REVERSED_CLIENT_ID": "moc.tnetnocresuelgoog.sppa.sg8rh1dlkbvd02nglf189tcg5k8gkrm3-36599290852",
+      "WEB_APPLICATION_CLIENT_ID": "25809299563-3mrkg8k5gct981flgn20dvbkld1hr8gs.apps.googleusercontent.com"
+    }
+  }
+}

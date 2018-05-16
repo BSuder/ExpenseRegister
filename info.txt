@@ -1,0 +1,47 @@
+Node version: v7.2.1
+
+Cordova version: 8.0.0
+
+Config.xml file: 
+
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="pl.patryk.expenseRegister" version="1.0.0" xmlns="http://www.w3.org/ns/widgets">
+    <name>First app</name>
+    <description>My first mobile app</description>
+    <author email="zonb93@gmail.com" href="http://mypersonalwebsite.com">
+        Adam Włodarczyk
+        Bartosz Suder
+        Patryk Rębilas
+    </author>
+    <variable name="323290425508-dkhisu6b0pfqe45e6s7u5bjjpk146ghq" value="ZfqRRdj0kVoD6t9iloHVNVgO" />
+    <plugin name="cordova-plugin-device" spec="2.0.1" />
+    <plugin name="cordova-plugin-dialogs" spec="2.0.1" />
+    <plugin name="cordova-plugin-googleplus" spec="~5.2.3" />
+    <engine name="browser" spec="~5.0.3" />
+    <engine name="android" spec="^7.0.0" />
+</widget>
+
+
+Plugins: 
+
+cordova-plugin-device,cordova-plugin-dialogs,cordova-plugin-googleplus
+
+Android platform:
+
+*************************************************************************
+The "android" command is deprecated.
+For manual SDK, AVD, and project management, please use Android Studio.
+For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager
+*************************************************************************
+Running /home/opt/opt/android/sdk/tools/bin/avdmanager list target
+
+Available Android targets:
+----------
+id: 1 or "android-25"
+     Name: Android API 25
+     Type: Platform
+     API level: 25
+     Revision: 3
+
+
+

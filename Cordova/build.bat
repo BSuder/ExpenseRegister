@@ -1,0 +1,1 @@
+cordova run android --debug -- --keystore=ExpenseRegister.keystore --alias=MyExpenseRegister --password=placek --storePassword=placek

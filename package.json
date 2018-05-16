@@ -1,0 +1,26 @@
+{
+  "name": "pl.patryk.expenseRegister",
+  "version": "1.0.0",
+  "displayName": "First app",
+  "cordova": {
+    "platforms": [
+      "browser",
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-device": {},
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-googleplus": {
+        "REVERSED_CLIENT_ID": "686795737390-j5n1pm8som4jdheark3q336pib3101k8.apps.googleusercontent.com",
+        "WEB_APPLICATION_CLIENT_ID": "686795737390-u2o1airh1e14jcm58cejmhihnfsn1991.apps.googleusercontent.com"
+      }
+    }
+  },
+  "dependencies": {
+    "cordova-android": "^7.0.0",
+    "cordova-browser": "~5.0.3",
+    "cordova-plugin-device": "2.0.1",
+    "cordova-plugin-dialogs": "2.0.1",
+    "cordova-plugin-googleplus": "~5.2.3"
+  }
+}
